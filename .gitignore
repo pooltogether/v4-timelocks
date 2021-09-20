@@ -19,3 +19,6 @@ types
 # Solidity Coverage
 coverage
 coverage.json
+
+.history
+.DS_Store

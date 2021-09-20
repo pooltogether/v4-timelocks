@@ -22,7 +22,10 @@
     "run-fork": "yarn impersonate-accounts && yarn distribute-ether && yarn create-prize-pool",
     "test": "yarn clean && HIDE_DEPLOY_LOG=true OPTIMIZER_DISABLED=true hardhat test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@pooltogether/owner-manager-contracts": "1.0.0-beta.2",
+    "@pooltogether/v4-core": "github://pooltogether/pooltogether-contract-tsunami#pool-1558-refactor-oracletimelock-into-separate"
+  },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "2.0.2",
     "@nomiclabs/hardhat-etherscan": "2.1.3",
