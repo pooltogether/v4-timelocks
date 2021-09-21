@@ -27,6 +27,7 @@ describe('DrawCalculatorTimelock', () => {
     drawCalculatorTimelockFactory = await ethers.getContractFactory('DrawCalculatorTimelock');
 
     drawCalculatorTimelock = await drawCalculatorTimelockFactory.deploy(
+      wallet1.address,
       drawCalculator.address,
       timelockDuration
     )
@@ -55,7 +56,7 @@ describe('DrawCalculatorTimelock', () => {
     })
 
     it('should not allow anyone else to set', async () => {
-      await expect(drawCalculatorTimelock.connect(wallet2).setTimelockDuration(66)).to.be.revertedWith('Ownable: caller is not the owner')
+      await expect(drawCalculatorTimelock.connect(wallet2).setTimelockDuration(66)).to.be.revertedWith('Ownable/caller-not-owner')
     })
   })
 

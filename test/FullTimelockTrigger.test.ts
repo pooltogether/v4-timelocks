@@ -33,6 +33,7 @@ describe('FullTimelockTrigger', () => {
     fullTimelockTriggerFactory = await ethers.getContractFactory('FullTimelockTrigger');
 
     fullTimelockTrigger = await fullTimelockTriggerFactory.deploy(
+      wallet1.address,
       drawHistory.address,
       tsunamiDrawSettingsHistory.address,
       drawCalculatorTimelock.address
@@ -68,7 +69,7 @@ describe('FullTimelockTrigger', () => {
     })
 
     it('should not allow a push from a non-owner', async () => {
-      await expect(fullTimelockTrigger.connect(wallet2).push(draw, drawSettings)).to.be.revertedWith('Manager/caller-not-manager-or-owner')
+      await expect(fullTimelockTrigger.connect(wallet2).push(draw, drawSettings)).to.be.revertedWith('Manageable/caller-not-manager-or-owner')
     })
 
     it('should not allow a push if a draw is still timelocked', async () => {

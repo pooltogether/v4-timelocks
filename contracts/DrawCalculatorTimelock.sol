@@ -1,6 +1,6 @@
 pragma solidity 0.8.6;
 
-import "@pooltogether/owner-manager-contracts/contracts/OwnerOrManager.sol";
+import "@pooltogether/owner-manager-contracts/contracts/Manageable.sol";
 
 import "./interfaces/IDrawCalculatorTimelock.sol";
 
@@ -13,7 +13,7 @@ import "./interfaces/IDrawCalculatorTimelock.sol";
             to  include a "cooldown" period for all new Draws. Allowing the correction of a
             malicously set Draw in the unfortunate event an Owner is compromised.
 */
-contract DrawCalculatorTimelock is IDrawCalculatorTimelock, IDrawCalculator, OwnerOrManager {
+contract DrawCalculatorTimelock is IDrawCalculatorTimelock, IDrawCalculator, Manageable {
 
   /* ============ Global Variables ============ */
 
@@ -34,9 +34,10 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, IDrawCalculator, Own
     * @param _timelockDuration           Elapsed seconds before new Draw is available
   */
   constructor (
+    address owner,
     IDrawCalculator _calculator,
     uint32 _timelockDuration
-  ) {
+  ) Ownable(owner) {
     calculator = _calculator;
     timelockDuration = _timelockDuration;
   }

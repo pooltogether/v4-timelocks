@@ -29,6 +29,7 @@ describe('DrawSettingsTimelockTrigger', () => {
     drawSettingsTimelockTriggerFactory = await ethers.getContractFactory('DrawSettingsTimelockTrigger');
 
     drawSettingsTimelockTrigger = await drawSettingsTimelockTriggerFactory.deploy(
+      wallet1.address,
       tsunamiDrawSettingsHistory.address,
       drawCalculatorTimelock.address
     )
@@ -56,7 +57,7 @@ describe('DrawSettingsTimelockTrigger', () => {
     })
 
     it('should not allow a push from a non-owner', async () => {
-      await expect(drawSettingsTimelockTrigger.connect(wallet2).pushDrawSettings(0, drawSettings)).to.be.revertedWith('Manager/caller-not-manager-or-owner')
+      await expect(drawSettingsTimelockTrigger.connect(wallet2).pushDrawSettings(0, drawSettings)).to.be.revertedWith('Manageable/caller-not-manager-or-owner')
     })
 
     it('should not allow a push if a draw is still timelocked', async () => {

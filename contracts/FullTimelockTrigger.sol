@@ -1,6 +1,6 @@
 pragma solidity 0.8.6;
 
-import "@pooltogether/owner-manager-contracts/contracts/OwnerOrManager.sol";
+import "@pooltogether/owner-manager-contracts/contracts/Manageable.sol";
 
 import "@pooltogether/v4-core/contracts/interfaces/ITsunamiDrawSettingsHistory.sol";
 import "@pooltogether/v4-core/contracts/interfaces/IDrawHistory.sol";
@@ -16,7 +16,7 @@ import "./interfaces/IDrawCalculatorTimelock.sol";
             to  include a "cooldown" period for all new Draws. Allowing the correction of a
             malicously set Draw in the unfortunate event an Owner is compromised.
 */
-contract FullTimelockTrigger is OwnerOrManager {
+contract FullTimelockTrigger is Manageable {
 
   /* ============ Global Variables ============ */
   /// @notice 
@@ -37,10 +37,11 @@ contract FullTimelockTrigger is OwnerOrManager {
     * @param _timelock           Elapsed seconds before new Draw is available
   */
   constructor (
+    address owner,
     IDrawHistory _drawHistory,
     ITsunamiDrawSettingsHistory _tsunamiDrawSettingsHistory,
     IDrawCalculatorTimelock _timelock
-  ) {
+  ) Ownable(owner) {
     drawHistory = _drawHistory;
     tsunamiDrawSettingsHistory = _tsunamiDrawSettingsHistory;
     timelock = _timelock;
