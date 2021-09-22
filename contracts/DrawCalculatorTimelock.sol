@@ -15,7 +15,7 @@ import "./interfaces/IDrawCalculatorTimelock.sol";
             to  include a "cooldown" period for all new Draws. Allowing the correction of a
             malicously set Draw in the unfortunate event an Owner is compromised.
 */
-contract DrawCalculatorTimelock is IDrawCalculatorTimelock, IDrawCalculator, Manageable {
+contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
 
   /* ============ Global Variables ============ */
 
@@ -32,16 +32,19 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, IDrawCalculator, Man
 
   /**
     * @notice Initialize DrawCalculatorTimelockTrigger smart contract.
-    * @param _calculator                 DrawCalculator address
-    * @param _timelockDuration           Elapsed seconds before new Draw is available
+    * @param _owner                       Address of the DrawCalculator owner.
+    * @param _calculator                 DrawCalculator address.
+    * @param _timelockDuration           Elapsed seconds before new Draw is available.
   */
   constructor (
-    address owner,
+    address _owner,
     IDrawCalculator _calculator,
     uint32 _timelockDuration
-  ) Ownable(owner) {
+  ) Ownable(_owner) {
     calculator = _calculator;
     timelockDuration = _timelockDuration;
+
+    emit Deployed(_calculator, _timelockDuration);
   }
 
   /**
