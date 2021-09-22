@@ -18,28 +18,39 @@ import "./interfaces/IDrawCalculatorTimelock.sol";
 */
 contract L2TimelockTrigger is Manageable {
 
+  /* ============ Events ============ */
+
+  /// @notice Emitted when the contract is deployed.
+  event Deployed(
+    ITsunamiDrawSettingsHistory indexed tsunamiDrawSettingsHistory,
+    IDrawCalculatorTimelock indexed timelock
+  );
+
   /* ============ Global Variables ============ */
 
   /// @notice Internal PrizeDistributionHistory reference.
   IPrizeDistributionHistory internal immutable prizeDistributionHistory;
 
-  /// @notice Internal Timelock struct reference.
-  IDrawCalculatorTimelock internal timelock;
+  /// @notice Timelock struct reference.
+  IDrawCalculatorTimelock public timelock;
 
   /* ============ Deploy ============ */
 
   /**
     * @notice Initialize L2TimelockTrigger smart contract.
+    * @param _owner                       Address of the L2TimelockTrigger owner.
     * @param _prizeDistributionHistory PrizeDistributionHistory address
     * @param _timelock           Elapsed seconds before new Draw is available
   */
   constructor (
-    address owner,
+    address _owner,
     IPrizeDistributionHistory _prizeDistributionHistory,
     IDrawCalculatorTimelock _timelock
-  ) Ownable(owner) {
+  ) Ownable(_owner) {
     prizeDistributionHistory = _prizeDistributionHistory;
     timelock = _timelock;
+
+    emit Deployed(_prizeDistributionHistory, _timelock);
   }
 
   /**

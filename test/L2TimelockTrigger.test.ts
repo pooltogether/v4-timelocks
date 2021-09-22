@@ -36,6 +36,17 @@ describe('L2TimelockTrigger', () => {
     )
   });
 
+    describe('constructor()', () => {
+    it('should emit Deployed event', async () => {
+      await expect(l2TimelockTrigger.deployTransaction)
+      .to.emit(l2TimelockTrigger, 'Deployed')
+      .withArgs(tsunamiDrawSettingsHistory.address, drawCalculatorTimelock.address);
+
+      expect(await l2TimelockTrigger.tsunamiDrawSettingsHistory()).to.equal(tsunamiDrawSettingsHistory.address);
+      expect(await l2TimelockTrigger.timelock()).to.equal(drawCalculatorTimelock.address);
+    })
+  })
+
   describe('pushDrawSettings()', () => {
     it('should allow a push when no push has happened', async () => {
       await prizeDistributionHistory.mock.pushDrawSettings.returns(true)
