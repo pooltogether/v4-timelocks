@@ -22,20 +22,19 @@
     "run-fork": "yarn impersonate-accounts && yarn distribute-ether && yarn create-prize-pool",
     "test": "yarn clean && HIDE_DEPLOY_LOG=true OPTIMIZER_DISABLED=true hardhat test"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "peerDependencies": {
     "@pooltogether/owner-manager-contracts": "1.1.0",
     "@pooltogether/v4-core": "github://pooltogether/pooltogether-contract-tsunami"
   },
   "devDependencies": {
-    "@pooltogether/owner-manager-contracts": "1.1.0",
-    "@pooltogether/v4-core": "github://pooltogether/pooltogether-contract-tsunami",
     "@nomiclabs/hardhat-ethers": "2.0.2",
     "@nomiclabs/hardhat-etherscan": "2.1.3",
     "@nomiclabs/hardhat-waffle": "2.0.1",
     "@openzeppelin/hardhat-upgrades": "1.6.0",
+    "@pooltogether/owner-manager-contracts": "1.1.0",
     "@pooltogether/pooltogether-proxy-factory-package": "^1.0.1",
+    "@pooltogether/v4-core": "github://pooltogether/pooltogether-contract-tsunami",
     "@types/chai": "4.2.15",
     "@types/debug": "4.1.5",
     "@types/mocha": "8.2.1",
@@ -54,7 +53,7 @@
     "hardhat-log-remover": "2.0.2",
     "prettier": "2.2.1",
     "solhint": "3.3.3",
-    "solidity-coverage": "0.7.16",
+    "solidity-coverage": "0.7.17",
     "ts-generator": "0.1.1",
     "ts-node": "9.1.1",
     "typescript": "4.2.3"
