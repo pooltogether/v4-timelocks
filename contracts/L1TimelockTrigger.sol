@@ -8,18 +8,18 @@ import "@pooltogether/v4-core/contracts/interfaces/IDrawHistory.sol";
 import "./interfaces/IDrawCalculatorTimelock.sol";
 
 /**
-  * @title  PoolTogether V4 DrawSettingsTimelockTrigger
+  * @title  PoolTogether V4 L1TimelockTrigger
   * @author PoolTogether Inc Team
-  * @notice DrawSettingsTimelockTrigger(s) acts as an intermediary between multiple V4 smart contracts.
-            The DrawSettingsTimelockTrigger is responsible for pushing Draws to a DrawHistory and routing
+  * @notice L1TimelockTrigger(s) acts as an intermediary between multiple V4 smart contracts.
+            The L1TimelockTrigger is responsible for pushing Draws to a DrawHistory and routing
             claim requests from a ClaimableDraw to a DrawCalculator. The primary objective is
             to  include a "cooldown" period for all new Draws. Allowing the correction of a
             malicously set Draw in the unfortunate event an Owner is compromised.
 */
-contract FullTimelockTrigger is Manageable {
+contract L1TimelockTrigger is Manageable {
 
   /* ============ Global Variables ============ */
-  /// @notice 
+  /// @notice
   IDrawHistory public immutable drawHistory;
 
   /// @notice Internal TsunamiDrawSettingsHistory reference.
@@ -31,7 +31,7 @@ contract FullTimelockTrigger is Manageable {
   /* ============ Deploy ============ */
 
   /**
-    * @notice Initialize DrawSettingsTimelockTrigger smart contract.
+    * @notice Initialize L1TimelockTrigger smart contract.
     * @param _tsunamiDrawSettingsHistory TsunamiDrawSettingsHistory address
     * @param _drawHistory                DrawHistory address
     * @param _timelock           Elapsed seconds before new Draw is available
@@ -46,7 +46,7 @@ contract FullTimelockTrigger is Manageable {
     tsunamiDrawSettingsHistory = _tsunamiDrawSettingsHistory;
     timelock = _timelock;
   }
-  
+
   /**
     * @notice Push Draw onto draws ring buffer history.
     * @dev    Restricts new draws by forcing a push timelock.

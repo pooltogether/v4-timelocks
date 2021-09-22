@@ -6,15 +6,15 @@ import "@pooltogether/v4-core/contracts/interfaces/ITsunamiDrawSettingsHistory.s
 import "./interfaces/IDrawCalculatorTimelock.sol";
 
 /**
-  * @title  PoolTogether V4 DrawSettingsTimelockTrigger
+  * @title  PoolTogether V4 L2TimelockTrigger
   * @author PoolTogether Inc Team
-  * @notice DrawSettingsTimelockTrigger(s) acts as an intermediary between multiple V4 smart contracts.
-            The DrawSettingsTimelockTrigger is responsible for pushing Draws to a DrawHistory and routing
+  * @notice L2TimelockTrigger(s) acts as an intermediary between multiple V4 smart contracts.
+            The L2TimelockTrigger is responsible for pushing Draws to a DrawHistory and routing
             claim requests from a ClaimableDraw to a DrawCalculator. The primary objective is
             to  include a "cooldown" period for all new Draws. Allowing the correction of a
             malicously set Draw in the unfortunate event an Owner is compromised.
 */
-contract DrawSettingsTimelockTrigger is Manageable {
+contract L2TimelockTrigger is Manageable {
 
   /* ============ Global Variables ============ */
 
@@ -27,7 +27,7 @@ contract DrawSettingsTimelockTrigger is Manageable {
   /* ============ Deploy ============ */
 
   /**
-    * @notice Initialize DrawSettingsTimelockTrigger smart contract.
+    * @notice Initialize L2TimelockTrigger smart contract.
     * @param _tsunamiDrawSettingsHistory TsunamiDrawSettingsHistory address
     * @param _timelock           Elapsed seconds before new Draw is available
   */

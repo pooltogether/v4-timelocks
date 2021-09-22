@@ -19,17 +19,17 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, IDrawCalculator, Man
 
   /// @notice Internal DrawCalculator reference.
   IDrawCalculator internal immutable calculator; // 160, leaves 96
-  
+
   /// @notice Seconds required to elapse before newest Draw is available
   uint32 internal timelockDuration; // take 32
-  
+
   /// @notice Internal Timelock struct reference.
   Timelock internal timelock; // new word
 
   /* ============ Deploy ============ */
 
   /**
-    * @notice Initialize DrawSettingsTimelockTrigger smart contract.
+    * @notice Initialize DrawCalculatorTimelockTrigger smart contract.
     * @param _calculator                 DrawCalculator address
     * @param _timelockDuration           Elapsed seconds before new Draw is available
   */
@@ -44,7 +44,7 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, IDrawCalculator, Man
 
   /**
     * @notice Routes claim/calculate requests between ClaimableDraw and DrawCalculator.
-    * @dev    Will enforce a "cooldown period between when a Draw is pushed and when users can start to claim prizes. 
+    * @dev    Will enforce a "cooldown" period between when a Draw is pushed and when users can start to claim prizes.
     * @param user    User address
     * @param drawIds Draw.drawId
     * @param data    Encoded pick indices
@@ -52,14 +52,15 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, IDrawCalculator, Man
   */
   function calculate(address user, uint32[] calldata drawIds, bytes calldata data) external override view returns (uint256[] memory) {
     Timelock memory timelock = timelock;
+
     for (uint256 i = 0; i < drawIds.length; i++) {
       // if draw id matches timelock and not expired, revert
       if (drawIds[i] == timelock.drawId) {
         requireTimelockElapsed(timelock);
       }
     }
+
     return calculator.calculate(user, drawIds, data);
-    
   }
 
   /**
@@ -130,7 +131,7 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, IDrawCalculator, Man
   }
 
   /**
-    * @notice Returns bool for timelockDuration elapsing. 
+    * @notice Returns bool for timelockDuration elapsing.
     * @return True if timelockDuration, since last timelock has elapsed, false otherwse.
   */
   function hasElapsed() external override view returns (bool) {

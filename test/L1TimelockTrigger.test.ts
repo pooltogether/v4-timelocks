@@ -4,18 +4,18 @@ import { ethers, artifacts } from 'hardhat';
 import { BigNumber, Contract, ContractFactory } from 'ethers';
 
 const { getSigners } = ethers;
-const newDebug = require('debug')
 
-describe('DrawSettingsTimelockTrigger', () => {
+describe('L1TimelockTrigger', () => {
   let wallet1: any;
   let wallet2: any;
 
-  let drawSettingsTimelockTrigger: Contract
+  let l1TimelockTrigger: Contract
 
   let tsunamiDrawSettingsHistory: MockContract
+  let drawHistory: MockContract
   let drawCalculatorTimelock: MockContract
 
-  let drawSettingsTimelockTriggerFactory: ContractFactory
+  let l1TimelockTriggerFactory: ContractFactory
 
   beforeEach(async () => {
     [wallet1, wallet2] = await getSigners();
@@ -23,20 +23,28 @@ describe('DrawSettingsTimelockTrigger', () => {
     const TsunamiDrawSettingsHistory = await artifacts.readArtifact('ITsunamiDrawSettingsHistory');
     tsunamiDrawSettingsHistory = await deployMockContract(wallet1, TsunamiDrawSettingsHistory.abi)
 
+    const DrawHistory = await artifacts.readArtifact('IDrawHistory');
+    drawHistory = await deployMockContract(wallet1, DrawHistory.abi)
+
     const DrawCalculatorTimelock = await artifacts.readArtifact('DrawCalculatorTimelock');
     drawCalculatorTimelock = await deployMockContract(wallet1, DrawCalculatorTimelock.abi)
 
-    drawSettingsTimelockTriggerFactory = await ethers.getContractFactory('DrawSettingsTimelockTrigger');
+    l1TimelockTriggerFactory = await ethers.getContractFactory('L1TimelockTrigger');
 
-    drawSettingsTimelockTrigger = await drawSettingsTimelockTriggerFactory.deploy(
+    l1TimelockTrigger = await l1TimelockTriggerFactory.deploy(
       wallet1.address,
+      drawHistory.address,
       tsunamiDrawSettingsHistory.address,
       drawCalculatorTimelock.address
     )
   });
 
-  describe('pushDrawSettings()', () => {
-    const debug = newDebug('pt:DrawSettingsTimelockTrigger.test.ts:push()')
+  describe('push()', () => {
+    const draw: any = {
+      drawId: BigNumber.from(0),
+      winningRandomNumber: BigNumber.from(1),
+      timestamp: BigNumber.from(10)
+    }
 
     const drawSettings: any = {
       matchCardinality: BigNumber.from(5),
@@ -50,20 +58,21 @@ describe('DrawSettingsTimelockTrigger', () => {
     }
 
     it('should allow a push when no push has happened', async () => {
+      await drawHistory.mock.pushDraw.returns(draw.drawId)
       await tsunamiDrawSettingsHistory.mock.pushDrawSettings.returns(true)
       await drawCalculatorTimelock.mock.lock.withArgs(0).returns(true)
-      await drawSettingsTimelockTrigger.pushDrawSettings(0, drawSettings)
-      // no problemo
+      await l1TimelockTrigger.push(draw, drawSettings)
     })
 
     it('should not allow a push from a non-owner', async () => {
-      await expect(drawSettingsTimelockTrigger.connect(wallet2).pushDrawSettings(0, drawSettings)).to.be.revertedWith('Manageable/caller-not-manager-or-owner')
+      await expect(l1TimelockTrigger.connect(wallet2).push(draw, drawSettings)).to.be.revertedWith('Manageable/caller-not-manager-or-owner')
     })
 
     it('should not allow a push if a draw is still timelocked', async () => {
       await drawCalculatorTimelock.mock.lock.withArgs(0).revertsWithReason('OM/timelock-not-expired')
+      await drawHistory.mock.pushDraw.returns(draw.drawId)
       await tsunamiDrawSettingsHistory.mock.pushDrawSettings.returns(true)
-      await expect(drawSettingsTimelockTrigger.pushDrawSettings(0, drawSettings)).to.be.revertedWith('OM/timelock-not-expired')
+      await expect(l1TimelockTrigger.push(draw, drawSettings)).to.be.revertedWith('OM/timelock-not-expired')
     })
   })
 })
