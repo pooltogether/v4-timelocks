@@ -20,6 +20,13 @@ import "./interfaces/IDrawCalculatorTimelock.sol";
 */
 contract L1TimelockTrigger is Manageable {
 
+  /// @notice Emitted when the contract is deployed.
+  event Deployed(
+    IDrawHistory indexed drawHistory,
+    ITsunamiDrawSettingsHistory indexed tsunamiDrawSettingsHistory,
+    IDrawCalculatorTimelock indexed timelock
+  );
+
   /* ============ Global Variables ============ */
   /// @notice
   IDrawHistory public immutable drawHistory;
@@ -27,26 +34,29 @@ contract L1TimelockTrigger is Manageable {
   /// @notice Internal PrizeDistributionHistory reference.
   IPrizeDistributionHistory public immutable prizeDistributionHistory;
 
-  /// @notice Internal Timelock struct reference.
+  /// @notice Timelock struct reference.
   IDrawCalculatorTimelock public timelock;
 
   /* ============ Deploy ============ */
 
   /**
     * @notice Initialize L1TimelockTrigger smart contract.
+    * @param _owner                       Address of the L1TimelockTrigger owner.
     * @param _prizeDistributionHistory PrizeDistributionHistory address
     * @param _drawHistory                DrawHistory address
     * @param _timelock           Elapsed seconds before new Draw is available
   */
   constructor (
-    address owner,
+    address _owner,
     IDrawHistory _drawHistory,
     IPrizeDistributionHistory _prizeDistributionHistory,
     IDrawCalculatorTimelock _timelock
-  ) Ownable(owner) {
+  ) Ownable(_owner) {
     drawHistory = _drawHistory;
     prizeDistributionHistory = _prizeDistributionHistory;
     timelock = _timelock;
+
+    emit Deployed(_drawHistory, _tsunamiDrawSettingsHistory, _timelock);
   }
 
   /**

@@ -43,6 +43,18 @@ describe('L1TimelockTrigger', () => {
     )
   });
 
+  describe('constructor()', () => {
+    it('should emit Deployed event and set variables', async () => {
+      await expect(l1TimelockTrigger.deployTransaction)
+      .to.emit(l1TimelockTrigger, 'Deployed')
+      .withArgs(drawHistory.address, tsunamiDrawSettingsHistory.address, drawCalculatorTimelock.address);
+
+      expect(await l1TimelockTrigger.drawHistory()).to.equal(drawHistory.address);
+      expect(await l1TimelockTrigger.tsunamiDrawSettingsHistory()).to.equal(tsunamiDrawSettingsHistory.address);
+      expect(await l1TimelockTrigger.timelock()).to.equal(drawCalculatorTimelock.address);
+    });
+  });
+
   describe('push()', () => {
     const draw: any = {
       drawId: BigNumber.from(0),
