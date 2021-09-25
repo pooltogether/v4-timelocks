@@ -27,7 +27,7 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, IDrawCalculator, Man
   /* ============ Deploy ============ */
 
   /**
-    * @notice Initialize L1TimelockTrigger smart contract.
+    * @notice Initialize DrawCalculatorTimelock smart contract.
     * @param _calculator                 DrawCalculator address
     * @param _timelockDuration           Elapsed seconds before new Draw is available
   */
