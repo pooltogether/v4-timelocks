@@ -1,13 +1,11 @@
 pragma solidity 0.8.6;
-
 import "@pooltogether/owner-manager-contracts/contracts/Manageable.sol";
-
 import "./interfaces/IDrawCalculatorTimelock.sol";
 
 /**
-  * @title  PoolTogether V4 OracleTimelock
+  * @title  PoolTogether V4 DrawCalculatorTimelock
   * @author PoolTogether Inc Team
-  * @notice OracleTimelock(s) acts as an intermediary between multiple V4 smart contracts.
+  * @notice DrawCalculatorTimelock(s) acts as an intermediary between multiple V4 smart contracts.
             The OracleTimelock is responsible for pushing Draws to a DrawHistory and routing
             claim requests from a ClaimableDraw to a DrawCalculator. The primary objective is
             to  include a "cooldown" period for all new Draws. Allowing the correction of a
@@ -29,7 +27,7 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, IDrawCalculator, Man
   /* ============ Deploy ============ */
 
   /**
-    * @notice Initialize DrawSettingsTimelockTrigger smart contract.
+    * @notice Initialize L1TimelockTrigger smart contract.
     * @param _calculator                 DrawCalculator address
     * @param _timelockDuration           Elapsed seconds before new Draw is available
   */

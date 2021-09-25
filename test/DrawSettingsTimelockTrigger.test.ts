@@ -6,7 +6,7 @@ import { BigNumber, Contract, ContractFactory } from 'ethers';
 const { getSigners } = ethers;
 const newDebug = require('debug')
 
-describe('DrawSettingsTimelockTrigger', () => {
+describe('L1TimelockTrigger', () => {
   let wallet1: any;
   let wallet2: any;
 
@@ -26,7 +26,7 @@ describe('DrawSettingsTimelockTrigger', () => {
     const DrawCalculatorTimelock = await artifacts.readArtifact('DrawCalculatorTimelock');
     drawCalculatorTimelock = await deployMockContract(wallet1, DrawCalculatorTimelock.abi)
 
-    drawSettingsTimelockTriggerFactory = await ethers.getContractFactory('DrawSettingsTimelockTrigger');
+    drawSettingsTimelockTriggerFactory = await ethers.getContractFactory('L1TimelockTrigger');
 
     drawSettingsTimelockTrigger = await drawSettingsTimelockTriggerFactory.deploy(
       wallet1.address,
@@ -36,7 +36,7 @@ describe('DrawSettingsTimelockTrigger', () => {
   });
 
   describe('pushDrawSettings()', () => {
-    const debug = newDebug('pt:DrawSettingsTimelockTrigger.test.ts:push()')
+    const debug = newDebug('pt:L1TimelockTrigger.test.ts:push()')
 
     const drawSettings: any = {
       matchCardinality: BigNumber.from(5),

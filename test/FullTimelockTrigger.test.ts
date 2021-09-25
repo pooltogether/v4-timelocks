@@ -6,7 +6,7 @@ import { BigNumber, Contract, ContractFactory } from 'ethers';
 const { getSigners } = ethers;
 const newDebug = require('debug')
 
-describe('FullTimelockTrigger', () => {
+describe('L2TimelockTrigger', () => {
   let wallet1: any;
   let wallet2: any;
 
@@ -30,7 +30,7 @@ describe('FullTimelockTrigger', () => {
     const DrawCalculatorTimelock = await artifacts.readArtifact('DrawCalculatorTimelock');
     drawCalculatorTimelock = await deployMockContract(wallet1, DrawCalculatorTimelock.abi)
 
-    fullTimelockTriggerFactory = await ethers.getContractFactory('FullTimelockTrigger');
+    fullTimelockTriggerFactory = await ethers.getContractFactory('L2TimelockTrigger');
 
     fullTimelockTrigger = await fullTimelockTriggerFactory.deploy(
       wallet1.address,
@@ -41,7 +41,7 @@ describe('FullTimelockTrigger', () => {
   });
 
   describe('push()', () => {
-    const debug = newDebug('pt:FullTimelockTrigger.test.ts:push()')
+    const debug = newDebug('pt:L2TimelockTrigger.test.ts:push()')
 
     const draw: any = {
       drawId: BigNumber.from(0),
