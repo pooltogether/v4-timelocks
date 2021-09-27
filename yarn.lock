@@ -1113,9 +1113,9 @@
   resolved "https://registry.yarnpkg.com/@pooltogether/uniform-random-number/-/uniform-random-number-1.0.0-beta.1.tgz#72257401fe8536e95f9f812f1d249262659084a7"
   integrity sha512-V4iqLOpNFNhnUqfKRlvqUeRwvKaODdz+qn4Qi65C3iMOnDb0J31tBvyhwKbhP4wauNuUN64WfepqkkxET9U7EQ==
 
-"@pooltogether/v4-core@github://pooltogether/pooltogether-contract-tsunami":
+"@pooltogether/v4-core@github://pooltogether/v4-core":
   version "1.0.0-beta.1"
-  resolved "git+ssh://git@github.com/pooltogether/pooltogether-contract-tsunami.git#c6d9cd3ab1461bf49bb8648da7c2fb428d59c8ad"
+  resolved "git+ssh://git@github.com/pooltogether/v4-core.git#fc036afcc1c51d628cbeedbdc8ed3d62a4a4e7de"
   dependencies:
     "@openzeppelin/contracts" "^4.3.1"
     "@pooltogether/fixed-point" "1.0.0"

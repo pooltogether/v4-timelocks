@@ -1,8 +1,10 @@
+// SPDX-License-Identifier: GPL-3.0
+
 pragma solidity 0.8.6;
 
 import "@pooltogether/owner-manager-contracts/contracts/Manageable.sol";
 
-import "@pooltogether/v4-core/contracts/interfaces/ITsunamiDrawSettingsHistory.sol";
+import "@pooltogether/v4-core/contracts/interfaces/IPrizeDistributionHistory.sol";
 import "./interfaces/IDrawCalculatorTimelock.sol";
 
 /**
@@ -18,8 +20,8 @@ contract L2TimelockTrigger is Manageable {
 
   /* ============ Global Variables ============ */
 
-  /// @notice Internal TsunamiDrawSettingsHistory reference.
-  ITsunamiDrawSettingsHistory internal immutable tsunamiDrawSettingsHistory;
+  /// @notice Internal PrizeDistributionHistory reference.
+  IPrizeDistributionHistory internal immutable prizeDistributionHistory;
 
   /// @notice Internal Timelock struct reference.
   IDrawCalculatorTimelock internal timelock;
@@ -28,15 +30,15 @@ contract L2TimelockTrigger is Manageable {
 
   /**
     * @notice Initialize L2TimelockTrigger smart contract.
-    * @param _tsunamiDrawSettingsHistory TsunamiDrawSettingsHistory address
+    * @param _prizeDistributionHistory PrizeDistributionHistory address
     * @param _timelock           Elapsed seconds before new Draw is available
   */
   constructor (
     address owner,
-    ITsunamiDrawSettingsHistory _tsunamiDrawSettingsHistory,
+    IPrizeDistributionHistory _prizeDistributionHistory,
     IDrawCalculatorTimelock _timelock
   ) Ownable(owner) {
-    tsunamiDrawSettingsHistory = _tsunamiDrawSettingsHistory;
+    prizeDistributionHistory = _prizeDistributionHistory;
     timelock = _timelock;
   }
 
@@ -46,9 +48,9 @@ contract L2TimelockTrigger is Manageable {
     * @param _drawId draw id
     * @param _drawSetting Draw settings
   */
-  function pushDrawSettings(uint32 _drawId, DrawLib.TsunamiDrawSettings memory _drawSetting) external onlyManagerOrOwner {
+  function pushDrawSettings(uint32 _drawId, DrawLib.PrizeDistribution memory _drawSetting) external onlyManagerOrOwner {
     timelock.lock(_drawId);
-    tsunamiDrawSettingsHistory.pushDrawSettings(_drawId, _drawSetting);
+    prizeDistributionHistory.pushDrawSettings(_drawId, _drawSetting);
   }
 
 }
