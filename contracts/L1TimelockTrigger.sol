@@ -23,7 +23,7 @@ contract L1TimelockTrigger is Manageable {
   /// @notice Emitted when the contract is deployed.
   event Deployed(
     IDrawHistory indexed drawHistory,
-    ITsunamiDrawSettingsHistory indexed tsunamiDrawSettingsHistory,
+    IPrizeDistributionHistory indexed prizeDistributionHistory,
     IDrawCalculatorTimelock indexed timelock
   );
 
@@ -56,7 +56,7 @@ contract L1TimelockTrigger is Manageable {
     prizeDistributionHistory = _prizeDistributionHistory;
     timelock = _timelock;
 
-    emit Deployed(_drawHistory, _tsunamiDrawSettingsHistory, _timelock);
+    emit Deployed(_drawHistory, _prizeDistributionHistory, _timelock);
   }
 
   /**

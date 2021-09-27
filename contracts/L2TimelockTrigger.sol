@@ -22,14 +22,14 @@ contract L2TimelockTrigger is Manageable {
 
   /// @notice Emitted when the contract is deployed.
   event Deployed(
-    ITsunamiDrawSettingsHistory indexed tsunamiDrawSettingsHistory,
+    IPrizeDistributionHistory indexed prizeDistributionHistory,
     IDrawCalculatorTimelock indexed timelock
   );
 
   /* ============ Global Variables ============ */
 
   /// @notice Internal PrizeDistributionHistory reference.
-  IPrizeDistributionHistory internal immutable prizeDistributionHistory;
+  IPrizeDistributionHistory public immutable prizeDistributionHistory;
 
   /// @notice Timelock struct reference.
   IDrawCalculatorTimelock public timelock;
