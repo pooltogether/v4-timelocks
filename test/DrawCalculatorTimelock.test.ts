@@ -34,6 +34,12 @@ describe('DrawCalculatorTimelock', () => {
   });
 
   describe('constructor()', () => {
+    it('should emit Deployed event', async () => {
+      await expect(drawCalculatorTimelock.deployTransaction)
+      .to.emit(drawCalculatorTimelock, 'Deployed')
+      .withArgs(drawCalculator.address, timelockDuration);
+    })
+
     it('should set the draw calculator', async () => {
       expect(await drawCalculatorTimelock.getDrawCalculator()).to.equal(drawCalculator.address)
     })

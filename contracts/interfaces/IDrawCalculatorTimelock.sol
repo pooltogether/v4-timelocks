@@ -11,10 +11,15 @@ interface IDrawCalculatorTimelock {
     uint32 drawId;
   }
 
+  event Deployed(
+    IDrawCalculator indexed drawCalculator,
+    uint32 timelockDuration
+  );
+
   event TimelockSet(Timelock timelock);
   event TimelockDurationSet(uint32 duration);
 
-  // function calculate(address user, uint32[] calldata drawIds, bytes calldata data) external override view returns (uint256[] memory);
+  function calculate(address user, uint32[] calldata drawIds, bytes calldata data) external view returns (uint256[] memory);
   function lock(uint32 drawId) external returns (bool);
   function getDrawCalculator() external view returns (IDrawCalculator);
   function getTimelock() external view returns (Timelock memory);

@@ -24,8 +24,8 @@ describe('L1TimelockTrigger', () => {
   beforeEach(async () => {
     [wallet1, wallet2] = await getSigners();
 
-    const TsunamiDrawSettingsHistory = await artifacts.readArtifact('IPrizeDistributionHistory');
-    prizeDistributionHistory = await deployMockContract(wallet1, TsunamiDrawSettingsHistory.abi)
+    const PrizeDistributionHistory = await artifacts.readArtifact('IPrizeDistributionHistory');
+    prizeDistributionHistory = await deployMockContract(wallet1, PrizeDistributionHistory.abi)
 
     const DrawHistory = await artifacts.readArtifact('IDrawHistory');
     drawHistory = await deployMockContract(wallet1, DrawHistory.abi)
@@ -41,6 +41,18 @@ describe('L1TimelockTrigger', () => {
       prizeDistributionHistory.address,
       drawCalculatorTimelock.address
     )
+  });
+
+  describe('constructor()', () => {
+    it('should emit Deployed event and set variables', async () => {
+      await expect(l1TimelockTrigger.deployTransaction)
+      .to.emit(l1TimelockTrigger, 'Deployed')
+      .withArgs(drawHistory.address, prizeDistributionHistory.address, drawCalculatorTimelock.address);
+
+      expect(await l1TimelockTrigger.drawHistory()).to.equal(drawHistory.address);
+      expect(await l1TimelockTrigger.prizeDistributionHistory()).to.equal(prizeDistributionHistory.address);
+      expect(await l1TimelockTrigger.timelock()).to.equal(drawCalculatorTimelock.address);
+    });
   });
 
   describe('push()', () => {
