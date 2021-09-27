@@ -1,29 +1,31 @@
+// SPDX-License-Identifier: GPL-3.0
+
 pragma solidity 0.8.6;
 
 import "@pooltogether/owner-manager-contracts/contracts/Manageable.sol";
 
-import "@pooltogether/v4-core/contracts/interfaces/ITsunamiDrawSettingsHistory.sol";
+import "@pooltogether/v4-core/contracts/interfaces/IPrizeDistributionHistory.sol";
 import "@pooltogether/v4-core/contracts/interfaces/IDrawHistory.sol";
 
 import "./interfaces/IDrawCalculatorTimelock.sol";
 
 /**
-  * @title  PoolTogether V4 DrawSettingsTimelockTrigger
+  * @title  PoolTogether V4 L1TimelockTrigger
   * @author PoolTogether Inc Team
-  * @notice DrawSettingsTimelockTrigger(s) acts as an intermediary between multiple V4 smart contracts.
-            The DrawSettingsTimelockTrigger is responsible for pushing Draws to a DrawHistory and routing
+  * @notice L1TimelockTrigger(s) acts as an intermediary between multiple V4 smart contracts.
+            The L1TimelockTrigger is responsible for pushing Draws to a DrawHistory and routing
             claim requests from a ClaimableDraw to a DrawCalculator. The primary objective is
             to  include a "cooldown" period for all new Draws. Allowing the correction of a
             malicously set Draw in the unfortunate event an Owner is compromised.
 */
-contract FullTimelockTrigger is Manageable {
+contract L1TimelockTrigger is Manageable {
 
   /* ============ Global Variables ============ */
-  /// @notice 
+  /// @notice
   IDrawHistory public immutable drawHistory;
 
-  /// @notice Internal TsunamiDrawSettingsHistory reference.
-  ITsunamiDrawSettingsHistory public immutable tsunamiDrawSettingsHistory;
+  /// @notice Internal PrizeDistributionHistory reference.
+  IPrizeDistributionHistory public immutable prizeDistributionHistory;
 
   /// @notice Internal Timelock struct reference.
   IDrawCalculatorTimelock public timelock;
@@ -31,30 +33,31 @@ contract FullTimelockTrigger is Manageable {
   /* ============ Deploy ============ */
 
   /**
-    * @notice Initialize DrawSettingsTimelockTrigger smart contract.
-    * @param _tsunamiDrawSettingsHistory TsunamiDrawSettingsHistory address
+    * @notice Initialize L1TimelockTrigger smart contract.
+    * @param _prizeDistributionHistory PrizeDistributionHistory address
     * @param _drawHistory                DrawHistory address
     * @param _timelock           Elapsed seconds before new Draw is available
   */
   constructor (
     address owner,
     IDrawHistory _drawHistory,
-    ITsunamiDrawSettingsHistory _tsunamiDrawSettingsHistory,
+    IPrizeDistributionHistory _prizeDistributionHistory,
     IDrawCalculatorTimelock _timelock
   ) Ownable(owner) {
     drawHistory = _drawHistory;
-    tsunamiDrawSettingsHistory = _tsunamiDrawSettingsHistory;
+    prizeDistributionHistory = _prizeDistributionHistory;
     timelock = _timelock;
   }
-  
+
   /**
     * @notice Push Draw onto draws ring buffer history.
     * @dev    Restricts new draws by forcing a push timelock.
     * @param _draw DrawLib.Draw
+    * @param _drawSetting DrawLib.PrizeDistribution
   */
-  function push(DrawLib.Draw memory _draw, DrawLib.TsunamiDrawSettings memory _drawSetting) external onlyManagerOrOwner {
+  function push(DrawLib.Draw memory _draw, DrawLib.PrizeDistribution memory _drawSetting) external onlyManagerOrOwner {
     timelock.lock(_draw.drawId);
     drawHistory.pushDraw(_draw);
-    tsunamiDrawSettingsHistory.pushDrawSettings(_draw.drawId, _drawSetting);
+    prizeDistributionHistory.pushDrawSettings(_draw.drawId, _drawSetting);
   }
 }
