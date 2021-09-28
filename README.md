@@ -29,18 +29,20 @@ Timelock contracts assist with Phase 1 in the roll-out of V4. Granting authority
 The DrawCalculatorTimelock adds a timelock for DrawPrizes to execute a claim with the most recently pushed PrizeDistribution params pushed. 
 
 ### L1TimelockTrigger & L2TimelockTrigger
-Both L1TimelockTrigger/L2TimelockTrigger contracts set a timelock or a "cooldown" period in the linked `DrawCalculatorTimelock` contract. The `DrawCalculatorTimelock` routes `calculate` execution through to a `DrawCalculator` contract for the `DrawPrize` contract with a cooldown period for the most recent Draw to be verified after a "challenge" period. The PoolTogether operations team will monitor the timelock contract for illicit draw settings be added to the history.
+Both L1TimelockTrigger/L2TimelockTrigger contracts set a timelock or a "cooldown" period in the linked `DrawCalculatorTimelock` contract. The `DrawCalculatorTimelock` routes `calculate` execution through a `DrawCalculator` contract for the linked `DrawPrize` contract.
+
+ A cooldown period for the most recent Draw to be automatically valid after a "challenge" period has elapsed. The PoolTogether operations team will monitor the timelock contract for illicit draw settings be added to the history.
 
 ### L1TimelockTrigger
-The L1TimelockTrigger pushes Draw and PrizeDistribution params onto DrawHistory and PrizeDistributionHistory.
+The `L1TimelockTrigger` contract pushes `DrawLib.Draw` and `DrawLib.PrizeDistribution` params onto the `DrawHistory` and `PrizeDistributionHistory` contracts.
 
 ### L2TimelockTrigger
-The L2TimelockTrigger pushes PrizeDistribution params and PrizeDistributionHistory.
+The `L2TimelockTrigger` pushes `DrawLib.PrizeDistribution` params onto a `PrizeDistributionHistory` contract.
 
 **Core and Timelock contracts:**
 
 - https://github.com/pooltogether/v4-core
-- https://github.com/pooltogether/v4-timelocks
+- https://github.com/pooltogether/v4-periphery
 
 # Getting Started
 
