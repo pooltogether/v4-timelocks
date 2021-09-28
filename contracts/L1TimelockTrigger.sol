@@ -59,9 +59,9 @@ contract L1TimelockTrigger is Manageable {
     * @param _drawId draw id
     * @param _drawSetting Draw settings
   */
-  function pushDrawSettings(uint32 _drawId, DrawLib.PrizeDistribution memory _drawSetting) external onlyManagerOrOwner {
+  function push(uint32 _drawId, DrawLib.PrizeDistribution memory _drawSetting) external onlyManagerOrOwner {
     timelock.lock(_drawId);
-    prizeDistributionHistory.pushDrawSettings(_drawId, _drawSetting);
+    prizeDistributionHistory.pushPrizeDistribution(_drawId, _drawSetting);
   }
 
 }

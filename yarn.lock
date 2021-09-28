@@ -962,7 +962,7 @@
 
 "@pooltogether/v4-core@github://pooltogether/v4-core":
   version "1.0.0-beta.1"
-  resolved "git+ssh://git@github.com/pooltogether/v4-core.git#7038adda8d4e7fd10fc7f0634c1e501f293f56e0"
+  resolved "git+ssh://git@github.com/pooltogether/v4-core.git#554d8d81f154a7d53d9d10f1f9d695c57292e83b"
   dependencies:
     "@openzeppelin/contracts" "^4.3.1"
     "@pooltogether/fixed-point" "1.0.0"

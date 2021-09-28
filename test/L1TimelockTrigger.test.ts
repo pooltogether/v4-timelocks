@@ -49,21 +49,21 @@ describe('L1TimelockTrigger', () => {
     });
   });
 
-  describe('pushDrawSettings()', () => {
+  describe('push()', () => {
     it('should allow a push when no push has happened', async () => {
-      await prizeDistributionHistory.mock.pushDrawSettings.returns(0)
+      await prizeDistributionHistory.mock.pushPrizeDistribution.returns(0)
       await drawCalculatorTimelock.mock.lock.withArgs(0).returns(true)
-      await l1TimelockTrigger.pushDrawSettings(0, newDrawSettings())
+      await l1TimelockTrigger.push(0, newDrawSettings())
     })
 
     it('should not allow a push from a non-owner', async () => {
-      await expect(l1TimelockTrigger.connect(wallet2).pushDrawSettings(0, newDrawSettings())).to.be.revertedWith('Manageable/caller-not-manager-or-owner')
+      await expect(l1TimelockTrigger.connect(wallet2).push(0, newDrawSettings())).to.be.revertedWith('Manageable/caller-not-manager-or-owner')
     })
 
     it('should not allow a push if a draw is still timelocked', async () => {
       await drawCalculatorTimelock.mock.lock.withArgs(0).revertsWithReason('OM/timelock-not-expired')
-      await prizeDistributionHistory.mock.pushDrawSettings.returns(0)
-      await expect(l1TimelockTrigger.pushDrawSettings(0, newDrawSettings())).to.be.revertedWith('OM/timelock-not-expired')
+      await prizeDistributionHistory.mock.pushPrizeDistribution.returns(0)
+      await expect(l1TimelockTrigger.push(0, newDrawSettings())).to.be.revertedWith('OM/timelock-not-expired')
     })
   })
 })

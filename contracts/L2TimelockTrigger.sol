@@ -68,6 +68,6 @@ contract L2TimelockTrigger is Manageable {
   function push(DrawLib.Draw memory _draw, DrawLib.PrizeDistribution memory _drawSetting) external onlyManagerOrOwner {
     timelock.lock(_draw.drawId);
     drawHistory.pushDraw(_draw);
-    prizeDistributionHistory.pushDrawSettings(_draw.drawId, _drawSetting);
+    prizeDistributionHistory.pushPrizeDistribution(_draw.drawId, _drawSetting);
   }
 }
