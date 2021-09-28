@@ -5,8 +5,6 @@ pragma solidity 0.8.6;
 import "@pooltogether/owner-manager-contracts/contracts/Manageable.sol";
 
 import "@pooltogether/v4-core/contracts/interfaces/IPrizeDistributionHistory.sol";
-import "@pooltogether/v4-core/contracts/interfaces/IDrawHistory.sol";
-
 import "./interfaces/IDrawCalculatorTimelock.sol";
 
 /**
@@ -20,16 +18,15 @@ import "./interfaces/IDrawCalculatorTimelock.sol";
 */
 contract L1TimelockTrigger is Manageable {
 
+  /* ============ Events ============ */
+
   /// @notice Emitted when the contract is deployed.
   event Deployed(
-    IDrawHistory indexed drawHistory,
     IPrizeDistributionHistory indexed prizeDistributionHistory,
     IDrawCalculatorTimelock indexed timelock
   );
 
   /* ============ Global Variables ============ */
-  /// @notice
-  IDrawHistory public immutable drawHistory;
 
   /// @notice Internal PrizeDistributionHistory reference.
   IPrizeDistributionHistory public immutable prizeDistributionHistory;
@@ -43,31 +40,28 @@ contract L1TimelockTrigger is Manageable {
     * @notice Initialize L1TimelockTrigger smart contract.
     * @param _owner                       Address of the L1TimelockTrigger owner.
     * @param _prizeDistributionHistory PrizeDistributionHistory address
-    * @param _drawHistory                DrawHistory address
     * @param _timelock           Elapsed seconds before new Draw is available
   */
   constructor (
     address _owner,
-    IDrawHistory _drawHistory,
     IPrizeDistributionHistory _prizeDistributionHistory,
     IDrawCalculatorTimelock _timelock
   ) Ownable(_owner) {
-    drawHistory = _drawHistory;
     prizeDistributionHistory = _prizeDistributionHistory;
     timelock = _timelock;
 
-    emit Deployed(_drawHistory, _prizeDistributionHistory, _timelock);
+    emit Deployed(_prizeDistributionHistory, _timelock);
   }
 
   /**
     * @notice Push Draw onto draws ring buffer history.
     * @dev    Restricts new draws by forcing a push timelock.
-    * @param _draw DrawLib.Draw
-    * @param _drawSetting DrawLib.PrizeDistribution
+    * @param _drawId draw id
+    * @param _drawSetting Draw settings
   */
-  function push(DrawLib.Draw memory _draw, DrawLib.PrizeDistribution memory _drawSetting) external onlyManagerOrOwner {
-    timelock.lock(_draw.drawId);
-    drawHistory.pushDraw(_draw);
-    prizeDistributionHistory.pushDrawSettings(_draw.drawId, _drawSetting);
+  function pushDrawSettings(uint32 _drawId, DrawLib.PrizeDistribution memory _drawSetting) external onlyManagerOrOwner {
+    timelock.lock(_drawId);
+    prizeDistributionHistory.pushDrawSettings(_drawId, _drawSetting);
   }
+
 }
