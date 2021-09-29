@@ -1,7 +1,6 @@
 # PoolTogether V4 Timelock Contracts
 
-[![<PoolTogether>](https://circleci.com/gh/pooltogether/v4-timelock.svg?style=shield)](https://circleci.com/gh/pooltogether/v4-timelock)
-[![Coverage Status](https://coveralls.io/repos/github/pooltogether/v4-timelock/badge.svg?branch=master)](https://coveralls.io/github/pooltogether/v4-timelock?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/pooltogether/v4-timelocks/badge.svg?branch=master)](https://coveralls.io/github/pooltogether/v4-timelocks?branch=master)
 [![built-with openzeppelin](https://img.shields.io/badge/built%20with-OpenZeppelin-3677FF)](https://docs.openzeppelin.com/)
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 
