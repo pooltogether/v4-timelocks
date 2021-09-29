@@ -28,7 +28,7 @@ contract L2TimelockTrigger is Manageable {
   );
 
   /* ============ Global Variables ============ */
-  /// @notice
+  /// @notice The DrawHistory contract address.
   IDrawHistory public immutable drawHistory;
 
   /// @notice Internal PrizeDistributionHistory reference.
@@ -58,6 +58,8 @@ contract L2TimelockTrigger is Manageable {
 
     emit Deployed(_drawHistory, _prizeDistributionHistory, _timelock);
   }
+
+  /* ============ External Functions ============ */
 
   /**
     * @notice Push Draw onto draws ring buffer history.

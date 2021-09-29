@@ -14,7 +14,7 @@
 **Documention**<br>
 https://docs.pooltogether.com
 
-**Deplyoments**<br>
+**Deployments**<br>
 - [Ethereum](https://docs.pooltogether.com/resources/networks/ethereum)
 - [Matic](https://docs.pooltogether.com/resources/networks/matic)
 
