@@ -5,6 +5,7 @@ pragma solidity 0.8.6;
 import "@pooltogether/owner-manager-contracts/contracts/Manageable.sol";
 
 import "@pooltogether/v4-core/contracts/interfaces/IPrizeDistributionHistory.sol";
+
 import "./interfaces/IDrawCalculatorTimelock.sol";
 
 /**
@@ -21,6 +22,8 @@ contract L1TimelockTrigger is Manageable {
   /* ============ Events ============ */
 
   /// @notice Emitted when the contract is deployed.
+  /// @param prizeDistributionHistory The address of the prize distribution history contract.
+  /// @param timelock The address of the DrawCalculatorTimelock
   event Deployed(
     IPrizeDistributionHistory indexed prizeDistributionHistory,
     IDrawCalculatorTimelock indexed timelock
