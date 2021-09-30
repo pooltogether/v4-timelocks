@@ -19,57 +19,59 @@ import "./interfaces/IDrawCalculatorTimelock.sol";
             malicously set Draw in the unfortunate event an Owner is compromised.
 */
 contract L2TimelockTrigger is Manageable {
+    /// @notice Emitted when the contract is deployed.
+    event Deployed(
+        IDrawHistory indexed drawHistory,
+        IPrizeDistributionHistory indexed prizeDistributionHistory,
+        IDrawCalculatorTimelock indexed timelock
+    );
 
-  /// @notice Emitted when the contract is deployed.
-  event Deployed(
-    IDrawHistory indexed drawHistory,
-    IPrizeDistributionHistory indexed prizeDistributionHistory,
-    IDrawCalculatorTimelock indexed timelock
-  );
+    /* ============ Global Variables ============ */
+    /// @notice The DrawHistory contract address.
+    IDrawHistory public immutable drawHistory;
 
-  /* ============ Global Variables ============ */
-  /// @notice The DrawHistory contract address.
-  IDrawHistory public immutable drawHistory;
+    /// @notice Internal PrizeDistributionHistory reference.
+    IPrizeDistributionHistory public immutable prizeDistributionHistory;
 
-  /// @notice Internal PrizeDistributionHistory reference.
-  IPrizeDistributionHistory public immutable prizeDistributionHistory;
+    /// @notice Timelock struct reference.
+    IDrawCalculatorTimelock public timelock;
 
-  /// @notice Timelock struct reference.
-  IDrawCalculatorTimelock public timelock;
+    /* ============ Deploy ============ */
 
-  /* ============ Deploy ============ */
+    /**
+     * @notice Initialize L2TimelockTrigger smart contract.
+     * @param _owner                       Address of the L2TimelockTrigger owner.
+     * @param _prizeDistributionHistory PrizeDistributionHistory address
+     * @param _drawHistory                DrawHistory address
+     * @param _timelock           Elapsed seconds before new Draw is available
+     */
+    constructor(
+        address _owner,
+        IDrawHistory _drawHistory,
+        IPrizeDistributionHistory _prizeDistributionHistory,
+        IDrawCalculatorTimelock _timelock
+    ) Ownable(_owner) {
+        drawHistory = _drawHistory;
+        prizeDistributionHistory = _prizeDistributionHistory;
+        timelock = _timelock;
 
-  /**
-    * @notice Initialize L2TimelockTrigger smart contract.
-    * @param _owner                       Address of the L2TimelockTrigger owner.
-    * @param _prizeDistributionHistory PrizeDistributionHistory address
-    * @param _drawHistory                DrawHistory address
-    * @param _timelock           Elapsed seconds before new Draw is available
-  */
-  constructor (
-    address _owner,
-    IDrawHistory _drawHistory,
-    IPrizeDistributionHistory _prizeDistributionHistory,
-    IDrawCalculatorTimelock _timelock
-  ) Ownable(_owner) {
-    drawHistory = _drawHistory;
-    prizeDistributionHistory = _prizeDistributionHistory;
-    timelock = _timelock;
+        emit Deployed(_drawHistory, _prizeDistributionHistory, _timelock);
+    }
 
-    emit Deployed(_drawHistory, _prizeDistributionHistory, _timelock);
-  }
+    /* ============ External Functions ============ */
 
-  /* ============ External Functions ============ */
-
-  /**
-    * @notice Push Draw onto draws ring buffer history.
-    * @dev    Restricts new draws by forcing a push timelock.
-    * @param _draw DrawLib.Draw
-    * @param _drawSetting DrawLib.PrizeDistribution
-  */
-  function push(DrawLib.Draw memory _draw, DrawLib.PrizeDistribution memory _drawSetting) external onlyManagerOrOwner {
-    timelock.lock(_draw.drawId);
-    drawHistory.pushDraw(_draw);
-    prizeDistributionHistory.pushPrizeDistribution(_draw.drawId, _drawSetting);
-  }
+    /**
+     * @notice Push Draw onto draws ring buffer history.
+     * @dev    Restricts new draws by forcing a push timelock.
+     * @param _draw DrawLib.Draw
+     * @param _drawSetting DrawLib.PrizeDistribution
+     */
+    function push(DrawLib.Draw memory _draw, DrawLib.PrizeDistribution memory _drawSetting)
+        external
+        onlyManagerOrOwner
+    {
+        timelock.lock(_draw.drawId);
+        drawHistory.pushDraw(_draw);
+        prizeDistributionHistory.pushPrizeDistribution(_draw.drawId, _drawSetting);
+    }
 }

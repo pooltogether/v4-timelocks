@@ -18,53 +18,54 @@ import "./interfaces/IDrawCalculatorTimelock.sol";
             malicously set Draw in the unfortunate event an Owner is compromised.
 */
 contract L1TimelockTrigger is Manageable {
+    /* ============ Events ============ */
 
-  /* ============ Events ============ */
+    /// @notice Emitted when the contract is deployed.
+    /// @param prizeDistributionHistory The address of the prize distribution history contract.
+    /// @param timelock The address of the DrawCalculatorTimelock
+    event Deployed(
+        IPrizeDistributionHistory indexed prizeDistributionHistory,
+        IDrawCalculatorTimelock indexed timelock
+    );
 
-  /// @notice Emitted when the contract is deployed.
-  /// @param prizeDistributionHistory The address of the prize distribution history contract.
-  /// @param timelock The address of the DrawCalculatorTimelock
-  event Deployed(
-    IPrizeDistributionHistory indexed prizeDistributionHistory,
-    IDrawCalculatorTimelock indexed timelock
-  );
+    /* ============ Global Variables ============ */
 
-  /* ============ Global Variables ============ */
+    /// @notice Internal PrizeDistributionHistory reference.
+    IPrizeDistributionHistory public immutable prizeDistributionHistory;
 
-  /// @notice Internal PrizeDistributionHistory reference.
-  IPrizeDistributionHistory public immutable prizeDistributionHistory;
+    /// @notice Timelock struct reference.
+    IDrawCalculatorTimelock public timelock;
 
-  /// @notice Timelock struct reference.
-  IDrawCalculatorTimelock public timelock;
+    /* ============ Deploy ============ */
 
-  /* ============ Deploy ============ */
+    /**
+     * @notice Initialize L1TimelockTrigger smart contract.
+     * @param _owner                       Address of the L1TimelockTrigger owner.
+     * @param _prizeDistributionHistory PrizeDistributionHistory address
+     * @param _timelock           Elapsed seconds before new Draw is available
+     */
+    constructor(
+        address _owner,
+        IPrizeDistributionHistory _prizeDistributionHistory,
+        IDrawCalculatorTimelock _timelock
+    ) Ownable(_owner) {
+        prizeDistributionHistory = _prizeDistributionHistory;
+        timelock = _timelock;
 
-  /**
-    * @notice Initialize L1TimelockTrigger smart contract.
-    * @param _owner                       Address of the L1TimelockTrigger owner.
-    * @param _prizeDistributionHistory PrizeDistributionHistory address
-    * @param _timelock           Elapsed seconds before new Draw is available
-  */
-  constructor (
-    address _owner,
-    IPrizeDistributionHistory _prizeDistributionHistory,
-    IDrawCalculatorTimelock _timelock
-  ) Ownable(_owner) {
-    prizeDistributionHistory = _prizeDistributionHistory;
-    timelock = _timelock;
+        emit Deployed(_prizeDistributionHistory, _timelock);
+    }
 
-    emit Deployed(_prizeDistributionHistory, _timelock);
-  }
-
-  /**
-    * @notice Push Draw onto draws ring buffer history.
-    * @dev    Restricts new draws by forcing a push timelock.
-    * @param _drawId draw id
-    * @param _drawSetting Draw settings
-  */
-  function push(uint32 _drawId, DrawLib.PrizeDistribution memory _drawSetting) external onlyManagerOrOwner {
-    timelock.lock(_drawId);
-    prizeDistributionHistory.pushPrizeDistribution(_drawId, _drawSetting);
-  }
-
+    /**
+     * @notice Push Draw onto draws ring buffer history.
+     * @dev    Restricts new draws by forcing a push timelock.
+     * @param _drawId draw id
+     * @param _drawSetting Draw settings
+     */
+    function push(uint32 _drawId, DrawLib.PrizeDistribution memory _drawSetting)
+        external
+        onlyManagerOrOwner
+    {
+        timelock.lock(_drawId);
+        prizeDistributionHistory.pushPrizeDistribution(_drawId, _drawSetting);
+    }
 }
