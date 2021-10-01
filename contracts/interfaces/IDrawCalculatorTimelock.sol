@@ -11,13 +11,6 @@ interface IDrawCalculatorTimelock {
     }
 
     /**
-     * @notice Deployed event when the constructor is called
-     * @param drawCalculator DrawCalculator address bound to this timelock
-     * @param timelockDuration Initial timelock duration
-     */
-    event Deployed(IDrawCalculator indexed drawCalculator, uint32 timelockDuration);
-
-    /**
      * @notice Emitted event when the timelock struct is updated
      * @param timelock Timelock struct set
      */
@@ -44,9 +37,10 @@ interface IDrawCalculatorTimelock {
     ) external view returns (uint256[] memory);
 
     /**
-     * @notice Push Draw onto draws ring buffer history.
+     * @notice Lock passed draw id for `timelockDuration` seconds.
      * @dev    Restricts new draws by forcing a push timelock.
-     * @param _drawId Draw id
+     * @param _drawId Draw id to lock.
+     * @return True if operation was successful.
      */
     function lock(uint32 _drawId) external returns (bool);
 
@@ -84,7 +78,7 @@ interface IDrawCalculatorTimelock {
 
     /**
      * @notice Returns bool for timelockDuration elapsing.
-     * @return True if timelockDuration, since last timelock has elapsed, false otherwse.
+     * @return True if timelockDuration, since last timelock has elapsed, false otherwise.
      */
     function hasElapsed() external view returns (bool);
 }

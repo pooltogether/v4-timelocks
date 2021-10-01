@@ -1,9 +1,14 @@
 import { expect } from 'chai';
 import { deployMockContract, MockContract } from 'ethereum-waffle';
-import { ethers, artifacts } from 'hardhat';
 import { Contract, ContractFactory } from 'ethers';
+import { ethers, artifacts } from 'hardhat';
 
-const { getSigners } = ethers;
+import { increaseTime as increaseTimeHelper } from './helpers/increaseTime';
+
+const { getSigners, provider } = ethers;
+const { getBlock } = provider;
+
+const increaseTime = (time: number) => increaseTimeHelper(provider, time);
 
 describe('DrawCalculatorTimelock', () => {
     let wallet1: any;
@@ -83,6 +88,80 @@ describe('DrawCalculatorTimelock', () => {
         });
     });
 
+    describe('lock()', () => {
+        let timelock: { drawId: number; timestamp: number };
+
+        beforeEach(async () => {
+            timelock = {
+                drawId: 1,
+                timestamp: (await getBlock('latest')).timestamp,
+            };
+
+            await drawCalculatorTimelock.setTimelock(timelock);
+        });
+
+        it('should lock next draw id', async () => {
+            await increaseTime(timelockDuration + 1);
+            await drawCalculatorTimelock.lock(2);
+
+            const timelock = await drawCalculatorTimelock.getTimelock();
+            const currentTimestamp = (await getBlock('latest')).timestamp;
+
+            expect(timelock.drawId).to.equal(2);
+            expect(timelock.timestamp).to.equal(currentTimestamp);
+        });
+
+        it('should lock next draw id if manager', async () => {
+            await drawCalculatorTimelock.setManager(wallet2.address);
+
+            await increaseTime(timelockDuration + 1);
+            await drawCalculatorTimelock.connect(wallet2).lock(2);
+
+            const timelock = await drawCalculatorTimelock.getTimelock();
+            const currentTimestamp = (await getBlock('latest')).timestamp;
+
+            expect(timelock.drawId).to.equal(2);
+            expect(timelock.timestamp).to.equal(currentTimestamp);
+        });
+
+        it('should fail if not called by the owner or manager', async () => {
+            await expect(drawCalculatorTimelock.connect(wallet2).lock(1)).to.be.revertedWith(
+                'Manageable/caller-not-manager-or-owner',
+            );
+        });
+
+        it('should fail to lock if trying to lock current or previous draw id', async () => {
+            await expect(drawCalculatorTimelock.lock(1)).to.be.revertedWith(
+                'OM/not-drawid-plus-one',
+            );
+        });
+    });
+
+    describe('hasElapsed()', () => {
+        it('should return true if the timelock has not been set', async () => {
+            expect(await drawCalculatorTimelock.hasElapsed()).to.equal(true);
+        });
+
+        it('should return true if the timelock has expired', async () => {
+            await drawCalculatorTimelock.setTimelock({
+                drawId: 1,
+                timestamp: (await getBlock('latest')).timestamp,
+            });
+
+            await increaseTime(timelockDuration + 1);
+            expect(await drawCalculatorTimelock.hasElapsed()).to.equal(true);
+        });
+
+        it('should return false if the timelock has not expired', async () => {
+            await drawCalculatorTimelock.setTimelock({
+                drawId: 1,
+                timestamp: (await getBlock('latest')).timestamp,
+            });
+
+            expect(await drawCalculatorTimelock.hasElapsed()).to.equal(false);
+        });
+    });
+
     describe('calculate()', () => {
         it('should do nothing if no timelock is set', async () => {
             await drawCalculator.mock.calculate.withArgs(wallet1.address, [0], '0x').returns([43]);
@@ -94,7 +173,8 @@ describe('DrawCalculatorTimelock', () => {
             let timestamp: number;
 
             beforeEach(async () => {
-                timestamp = (await ethers.provider.getBlock('latest')).timestamp;
+                timestamp = (await getBlock('latest')).timestamp;
+
                 await drawCalculatorTimelock.setTimelock({
                     drawId: 1,
                     timestamp: timestamp + 1000,
@@ -111,11 +191,13 @@ describe('DrawCalculatorTimelock', () => {
                 await drawCalculator.mock.calculate
                     .withArgs(wallet1.address, [0, 2], '0x')
                     .returns([44, 5]);
+
                 const result = await drawCalculatorTimelock.calculate(
                     wallet1.address,
                     [0, 2],
                     '0x',
                 );
+
                 expect(result[0]).to.equal('44');
                 expect(result[1]).to.equal('5');
             });

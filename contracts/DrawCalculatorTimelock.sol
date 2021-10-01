@@ -12,8 +12,8 @@ import "./interfaces/IDrawCalculatorTimelock.sol";
   * @notice OracleTimelock(s) acts as an intermediary between multiple V4 smart contracts.
             The OracleTimelock is responsible for pushing Draws to a DrawHistory and routing
             claim requests from a ClaimableDraw to a DrawCalculator. The primary objective is
-            to  include a "cooldown" period for all new Draws. Allowing the correction of a
-            malicously set Draw in the unfortunate event an Owner is compromised.
+            to include a "cooldown" period for all new Draws. Allowing the correction of a
+            maliciously set Draw in the unfortunate event an Owner is compromised.
 */
 contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
     /* ============ Global Variables ============ */
@@ -21,11 +21,20 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
     /// @notice Internal DrawCalculator reference.
     IDrawCalculator internal immutable calculator;
 
-    /// @notice Seconds required to elapse before newest Draw is available
+    /// @notice Seconds required to elapse before newest Draw is available.
     uint32 internal timelockDuration;
 
     /// @notice Internal Timelock struct reference.
     Timelock internal timelock;
+
+    /* ============ Events ============ */
+
+    /**
+     * @notice Deployed event when the constructor is called
+     * @param drawCalculator DrawCalculator address bound to this timelock
+     * @param timelockDuration Initial timelock duration
+     */
+    event Deployed(IDrawCalculator indexed drawCalculator, uint32 timelockDuration);
 
     /* ============ Deploy ============ */
 
@@ -70,8 +79,11 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
     function lock(uint32 _drawId) external override onlyManagerOrOwner returns (bool) {
         Timelock memory _timelock = timelock;
         require(_drawId == _timelock.drawId + 1, "OM/not-drawid-plus-one");
+
         _requireTimelockElapsed(_timelock);
+
         timelock = Timelock({ drawId: _drawId, timestamp: uint128(block.timestamp) });
+
         return true;
     }
 
@@ -120,7 +132,8 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
         if (_timelock.timestamp == 0) {
             return true;
         }
-        // otherwise if the timelock has expired, we're good.
+
+        // Otherwise if the timelock has expired, we're good.
         return (block.timestamp > _timelock.timestamp + timelockDuration);
     }
 
