@@ -15,7 +15,7 @@ interface IDrawCalculatorTimelock {
      * @param drawId    Draw ID
      * @param timestamp Block timestamp
      */
-    event LockedDraw(uint32 drawId, uint32 timestamp);
+    event LockedDraw(uint32 indexed drawId, uint32 timestamp);
 
     /**
      * @notice Emitted event when the timelock struct is updated
