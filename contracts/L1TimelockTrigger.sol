@@ -40,9 +40,9 @@ contract L1TimelockTrigger is Manageable {
 
     /**
      * @notice Initialize L1TimelockTrigger smart contract.
-     * @param _owner                       Address of the L1TimelockTrigger owner.
+     * @param _owner                    Address of the L1TimelockTrigger owner.
      * @param _prizeDistributionHistory PrizeDistributionHistory address
-     * @param _timelock           Elapsed seconds before new Draw is available
+     * @param _timelock                 Elapsed seconds before new Draw is available
      */
     constructor(
         address _owner,

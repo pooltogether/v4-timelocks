@@ -82,7 +82,9 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
 
         _requireTimelockElapsed(_timelock);
 
-        timelock = Timelock({ drawId: _drawId, timestamp: uint128(block.timestamp) });
+        uint128 _timestamp = uint128(block.timestamp);
+        timelock = Timelock({ drawId: _drawId, timestamp: _timestamp });
+        emit LockedDraw(_drawId, uint32(_timestamp));
 
         return true;
     }
