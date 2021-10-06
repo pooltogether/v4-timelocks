@@ -113,7 +113,7 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
 
     /// @inheritdoc IDrawCalculatorTimelock
     function setTimelockDuration(uint32 _timelockDuration) external override onlyOwner {
-        _setTimelockDuration)(_timelockDuration);
+        _setTimelockDuration(_timelockDuration);
     }
 
     /// @inheritdoc IDrawCalculatorTimelock
