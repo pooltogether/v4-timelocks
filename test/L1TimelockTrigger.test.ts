@@ -56,7 +56,8 @@ describe('L1TimelockTrigger', () => {
         it('should allow a push when no push has happened', async () => {
             await prizeDistributionHistory.mock.pushPrizeDistribution.returns(0);
             await drawCalculatorTimelock.mock.lock.withArgs(0).returns(true);
-            await l1TimelockTrigger.push(0, newDrawSettings());
+            expect(l1TimelockTrigger.push(0, newDrawSettings()))
+                .to.emit(l1TimelockTrigger, 'PrizeDistributionPushed');
         });
 
         it('should not allow a push from a non-owner', async () => {
