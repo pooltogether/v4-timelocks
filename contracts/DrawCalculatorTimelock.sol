@@ -50,7 +50,7 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
         uint32 _timelockDuration
     ) Ownable(_owner) {
         calculator = _calculator;
-        timelockDuration = _timelockDuration;
+        _setTimelockDuration(_timelockDuration);
 
         emit Deployed(_calculator, _timelockDuration);
     }
@@ -82,7 +82,9 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
 
         _requireTimelockElapsed(_timelock);
 
-        timelock = Timelock({ drawId: _drawId, timestamp: uint128(block.timestamp) });
+        uint128 _timestamp = uint128(block.timestamp);
+        timelock = Timelock({ drawId: _drawId, timestamp: _timestamp });
+        emit LockedDraw(_drawId, uint32(_timestamp));
 
         return true;
     }
@@ -111,9 +113,7 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
 
     /// @inheritdoc IDrawCalculatorTimelock
     function setTimelockDuration(uint32 _timelockDuration) external override onlyOwner {
-        timelockDuration = _timelockDuration;
-
-        emit TimelockDurationSet(_timelockDuration);
+        _setTimelockDuration(_timelockDuration);
     }
 
     /// @inheritdoc IDrawCalculatorTimelock
@@ -122,6 +122,14 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
     }
 
     /* ============ Internal Functions ============ */
+
+    /**
+     * @notice Set global timelockDuration variable.
+     */
+    function _setTimelockDuration(uint32 _timelockDuration) internal {
+        timelockDuration = _timelockDuration;
+        emit TimelockDurationSet(_timelockDuration);
+    }
 
     /**
      * @notice Read global DrawCalculator variable.

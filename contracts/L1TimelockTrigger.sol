@@ -28,6 +28,14 @@ contract L1TimelockTrigger is Manageable {
         IDrawCalculatorTimelock indexed timelock
     );
 
+    /**
+     * @notice Emitted when target prize distribution is pushed.
+     * @param drawId    Draw ID
+     * @param prizeDistribution PrizeDistribution
+     */
+    event PrizeDistributionPushed(uint32 indexed drawId, DrawLib.PrizeDistribution prizeDistribution);
+
+
     /* ============ Global Variables ============ */
 
     /// @notice Internal PrizeDistributionHistory reference.
@@ -40,9 +48,9 @@ contract L1TimelockTrigger is Manageable {
 
     /**
      * @notice Initialize L1TimelockTrigger smart contract.
-     * @param _owner                       Address of the L1TimelockTrigger owner.
+     * @param _owner                    Address of the L1TimelockTrigger owner.
      * @param _prizeDistributionHistory PrizeDistributionHistory address
-     * @param _timelock           Elapsed seconds before new Draw is available
+     * @param _timelock                 Elapsed seconds before new Draw is available
      */
     constructor(
         address _owner,
@@ -59,13 +67,14 @@ contract L1TimelockTrigger is Manageable {
      * @notice Push Draw onto draws ring buffer history.
      * @dev    Restricts new draws by forcing a push timelock.
      * @param _drawId draw id
-     * @param _drawSetting Draw settings
+     * @param _prizeDistribution PrizeDistribution parameters
      */
-    function push(uint32 _drawId, DrawLib.PrizeDistribution memory _drawSetting)
+    function push(uint32 _drawId, DrawLib.PrizeDistribution memory _prizeDistribution)
         external
         onlyManagerOrOwner
     {
         timelock.lock(_drawId);
-        prizeDistributionHistory.pushPrizeDistribution(_drawId, _drawSetting);
+        prizeDistributionHistory.pushPrizeDistribution(_drawId, _prizeDistribution);
+        emit PrizeDistributionPushed(_drawId, _prizeDistribution);
     }
 }

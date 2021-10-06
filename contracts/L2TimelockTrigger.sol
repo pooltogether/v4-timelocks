@@ -19,12 +19,20 @@ import "./interfaces/IDrawCalculatorTimelock.sol";
             malicously set Draw in the unfortunate event an Owner is compromised.
 */
 contract L2TimelockTrigger is Manageable {
+    
     /// @notice Emitted when the contract is deployed.
     event Deployed(
         IDrawHistory indexed drawHistory,
         IPrizeDistributionHistory indexed prizeDistributionHistory,
         IDrawCalculatorTimelock indexed timelock
     );
+
+    /**
+     * @notice Emitted when target prize distribution is pushed.
+     * @param drawId    Draw ID
+     * @param prizeDistribution PrizeDistribution
+     */
+    event DrawAndPrizeDistributionPushed(uint32 indexed drawId, DrawLib.Draw draw, DrawLib.PrizeDistribution prizeDistribution);
 
     /* ============ Global Variables ============ */
     /// @notice The DrawHistory contract address.
@@ -63,15 +71,16 @@ contract L2TimelockTrigger is Manageable {
     /**
      * @notice Push Draw onto draws ring buffer history.
      * @dev    Restricts new draws by forcing a push timelock.
-     * @param _draw DrawLib.Draw
-     * @param _drawSetting DrawLib.PrizeDistribution
+     * @param _draw Draw
+     * @param _prizeDistribution PrizeDistribution
      */
-    function push(DrawLib.Draw memory _draw, DrawLib.PrizeDistribution memory _drawSetting)
+    function push(DrawLib.Draw memory _draw, DrawLib.PrizeDistribution memory _prizeDistribution)
         external
         onlyManagerOrOwner
     {
         timelock.lock(_draw.drawId);
         drawHistory.pushDraw(_draw);
-        prizeDistributionHistory.pushPrizeDistribution(_draw.drawId, _drawSetting);
+        prizeDistributionHistory.pushPrizeDistribution(_draw.drawId, _prizeDistribution);
+        emit DrawAndPrizeDistributionPushed(_draw.drawId, _draw, _prizeDistribution);
     }
 }
