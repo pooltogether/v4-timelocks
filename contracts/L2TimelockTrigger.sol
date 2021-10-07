@@ -33,7 +33,7 @@ contract L2TimelockTrigger is Manageable {
 
     /* ============ Global Variables ============ */
     /// @notice The DrawBuffer contract address.
-    IDrawBuffer public immutable DrawBuffer;
+    IDrawBuffer public immutable drawBuffer;
 
     /// @notice Internal PrizeDistributionBuffer reference.
     IPrizeDistributionBuffer public immutable prizeDistributionBuffer;
