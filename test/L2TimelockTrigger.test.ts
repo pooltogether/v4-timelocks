@@ -51,7 +51,7 @@ describe('L2TimelockTrigger', () => {
                     drawCalculatorTimelock.address,
                 );
 
-            expect(await l2TimelockTrigger.DrawBuffer()).to.equal(DrawBuffer.address);
+            expect(await l2TimelockTrigger.DrawBuffer()).to.equal(drawBuffer.address);
 
             expect(await l2TimelockTrigger.prizeDistributionBuffer()).to.equal(
                 prizeDistributionBuffer.address,
