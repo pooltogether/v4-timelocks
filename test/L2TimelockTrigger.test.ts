@@ -15,7 +15,7 @@ describe('L2TimelockTrigger', () => {
 
     let prizeDistributionBuffer: MockContract;
     let drawCalculatorTimelock: MockContract;
-    let DrawBuffer: MockContract;
+    let drawBuffer: MockContract;
 
     let l2TimelockTriggerFactory: ContractFactory;
 
@@ -26,7 +26,7 @@ describe('L2TimelockTrigger', () => {
         prizeDistributionBuffer = await deployMockContract(wallet1, PrizeDistributionBuffer.abi);
 
         const DrawBufferArtifact = await artifacts.readArtifact('IDrawBuffer');
-        DrawBuffer = await deployMockContract(wallet1, DrawBufferArtifact.abi);
+        drawBuffer = await deployMockContract(wallet1, DrawBufferArtifact.abi);
 
         const DrawCalculatorTimelock = await artifacts.readArtifact('DrawCalculatorTimelock');
         drawCalculatorTimelock = await deployMockContract(wallet1, DrawCalculatorTimelock.abi);
@@ -51,7 +51,7 @@ describe('L2TimelockTrigger', () => {
                     drawCalculatorTimelock.address,
                 );
 
-            expect(await l2TimelockTrigger.DrawBuffer()).to.equal(drawBuffer.address);
+            expect(await l2TimelockTrigger.drawBuffer()).to.equal(drawBuffer.address);
 
             expect(await l2TimelockTrigger.prizeDistributionBuffer()).to.equal(
                 prizeDistributionBuffer.address,

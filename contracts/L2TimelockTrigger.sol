@@ -25,13 +25,14 @@ contract L2TimelockTrigger is Manageable {
     );
 
     /**
-     * @notice Emitted when target prize distribution is pushed.
-     * @param drawId    Draw ID
+     * @notice Emitted when Draw and PrizeDistribution are pushed to external contracts.
+     * @param drawId            Draw ID
      * @param prizeDistribution PrizeDistribution
      */
     event DrawAndPrizeDistributionPushed(uint32 indexed drawId, IDrawBeacon.Draw draw, IPrizeDistributionBuffer.PrizeDistribution prizeDistribution);
 
     /* ============ Global Variables ============ */
+
     /// @notice The DrawBuffer contract address.
     IDrawBuffer public immutable drawBuffer;
 
@@ -45,10 +46,10 @@ contract L2TimelockTrigger is Manageable {
 
     /**
      * @notice Initialize L2TimelockTrigger smart contract.
-     * @param _owner                       Address of the L2TimelockTrigger owner.
+     * @param _owner                   Address of the L2TimelockTrigger owner.
      * @param _prizeDistributionBuffer PrizeDistributionBuffer address
-     * @param _drawBuffer                DrawBuffer address
-     * @param _timelock           Elapsed seconds before new Draw is available
+     * @param _drawBuffer              DrawBuffer address
+     * @param _timelock                Elapsed seconds before timelocked Draw is available
      */
     constructor(
         address _owner,
@@ -68,8 +69,8 @@ contract L2TimelockTrigger is Manageable {
     /**
      * @notice Push Draw onto draws ring buffer history.
      * @dev    Restricts new draws by forcing a push timelock.
-     * @param _draw Draw
-     * @param _prizeDistribution PrizeDistribution
+     * @param _draw              Draw struct from IDrawBeacon
+     * @param _prizeDistribution PrizeDistribution struct frmo IPrizeDistributionBuffer
      */
     function push(IDrawBeacon.Draw memory _draw, IPrizeDistributionBuffer.PrizeDistribution memory _prizeDistribution)
         external
