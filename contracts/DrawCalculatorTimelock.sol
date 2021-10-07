@@ -11,7 +11,7 @@ import "./interfaces/IDrawCalculatorTimelock.sol";
   * @author PoolTogether Inc Team
   * @notice OracleTimelock(s) acts as an intermediary between multiple V4 smart contracts.
             The OracleTimelock is responsible for pushing Draws to a DrawHistory and routing
-            claim requests from a ClaimableDraw to a DrawCalculator. The primary objective is
+            claim requests from a PrizeDistributor to a DrawCalculator. The primary objective is
             to include a "cooldown" period for all new Draws. Allowing the correction of a
             maliciously set Draw in the unfortunate event an Owner is compromised.
 */

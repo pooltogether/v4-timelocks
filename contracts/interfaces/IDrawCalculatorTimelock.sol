@@ -30,7 +30,7 @@ interface IDrawCalculatorTimelock {
     event TimelockDurationSet(uint32 duration);
 
     /**
-     * @notice Routes claim/calculate requests between ClaimableDraw and DrawCalculator.
+     * @notice Routes claim/calculate requests between PrizeDistributor and DrawCalculator.
      * @dev    Will enforce a "cooldown" period between when a Draw is pushed and when users can start to claim prizes.
      * @param user    User address
      * @param drawIds Draw.drawId

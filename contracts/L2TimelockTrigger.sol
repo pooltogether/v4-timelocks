@@ -14,7 +14,7 @@ import "./interfaces/IDrawCalculatorTimelock.sol";
   * @author PoolTogether Inc Team
   * @notice L2TimelockTrigger(s) acts as an intermediary between multiple V4 smart contracts.
             The L2TimelockTrigger is responsible for pushing Draws to a DrawHistory and routing
-            claim requests from a ClaimableDraw to a DrawCalculator. The primary objective is
+            claim requests from a PrizeDistributor to a DrawCalculator. The primary objective is
             to  include a "cooldown" period for all new Draws. Allowing the correction of a
             malicously set Draw in the unfortunate event an Owner is compromised.
 */
