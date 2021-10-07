@@ -1,19 +1,16 @@
 // SPDX-License-Identifier: GPL-3.0
-
 pragma solidity 0.8.6;
-
 import "@pooltogether/owner-manager-contracts/contracts/Manageable.sol";
-
+import "@pooltogether/v4-core/contracts/interfaces/IDrawBeacon.sol";
 import "@pooltogether/v4-core/contracts/interfaces/IPrizeDistributionBuffer.sol";
-import "@pooltogether/v4-core/contracts/interfaces/IDrawHistory.sol";
-
+import "@pooltogether/v4-core/contracts/interfaces/IDrawBuffer.sol";
 import "./interfaces/IDrawCalculatorTimelock.sol";
 
 /**
   * @title  PoolTogether V4 L2TimelockTrigger
   * @author PoolTogether Inc Team
   * @notice L2TimelockTrigger(s) acts as an intermediary between multiple V4 smart contracts.
-            The L2TimelockTrigger is responsible for pushing Draws to a DrawHistory and routing
+            The L2TimelockTrigger is responsible for pushing Draws to a DrawBuffer and routing
             claim requests from a PrizeDistributor to a DrawCalculator. The primary objective is
             to  include a "cooldown" period for all new Draws. Allowing the correction of a
             malicously set Draw in the unfortunate event an Owner is compromised.
@@ -22,8 +19,8 @@ contract L2TimelockTrigger is Manageable {
     
     /// @notice Emitted when the contract is deployed.
     event Deployed(
-        IDrawHistory indexed drawHistory,
-        IPrizeDistributionBuffer indexed prizeDistributionHistory,
+        IDrawBuffer indexed DrawBuffer,
+        IPrizeDistributionBuffer indexed prizeDistributionBuffer,
         IDrawCalculatorTimelock indexed timelock
     );
 
@@ -32,14 +29,14 @@ contract L2TimelockTrigger is Manageable {
      * @param drawId    Draw ID
      * @param prizeDistribution PrizeDistribution
      */
-    event DrawAndPrizeDistributionPushed(uint32 indexed drawId, DrawLib.Draw draw, DrawLib.PrizeDistribution prizeDistribution);
+    event DrawAndPrizeDistributionPushed(uint32 indexed drawId, IDrawBeacon.Draw draw, IPrizeDistributionBuffer.PrizeDistribution prizeDistribution);
 
     /* ============ Global Variables ============ */
-    /// @notice The DrawHistory contract address.
-    IDrawHistory public immutable drawHistory;
+    /// @notice The DrawBuffer contract address.
+    IDrawBuffer public immutable DrawBuffer;
 
     /// @notice Internal PrizeDistributionBuffer reference.
-    IPrizeDistributionBuffer public immutable prizeDistributionHistory;
+    IPrizeDistributionBuffer public immutable prizeDistributionBuffer;
 
     /// @notice Timelock struct reference.
     IDrawCalculatorTimelock public timelock;
@@ -49,21 +46,21 @@ contract L2TimelockTrigger is Manageable {
     /**
      * @notice Initialize L2TimelockTrigger smart contract.
      * @param _owner                       Address of the L2TimelockTrigger owner.
-     * @param _prizeDistributionHistory PrizeDistributionBuffer address
-     * @param _drawHistory                DrawHistory address
+     * @param _prizeDistributionBuffer PrizeDistributionBuffer address
+     * @param _DrawBuffer                DrawBuffer address
      * @param _timelock           Elapsed seconds before new Draw is available
      */
     constructor(
         address _owner,
-        IDrawHistory _drawHistory,
-        IPrizeDistributionBuffer _prizeDistributionHistory,
+        IDrawBuffer _DrawBuffer,
+        IPrizeDistributionBuffer _prizeDistributionBuffer,
         IDrawCalculatorTimelock _timelock
     ) Ownable(_owner) {
-        drawHistory = _drawHistory;
-        prizeDistributionHistory = _prizeDistributionHistory;
+        DrawBuffer = _DrawBuffer;
+        prizeDistributionBuffer = _prizeDistributionBuffer;
         timelock = _timelock;
 
-        emit Deployed(_drawHistory, _prizeDistributionHistory, _timelock);
+        emit Deployed(_DrawBuffer, _prizeDistributionBuffer, _timelock);
     }
 
     /* ============ External Functions ============ */
@@ -74,13 +71,13 @@ contract L2TimelockTrigger is Manageable {
      * @param _draw Draw
      * @param _prizeDistribution PrizeDistribution
      */
-    function push(DrawLib.Draw memory _draw, DrawLib.PrizeDistribution memory _prizeDistribution)
+    function push(IDrawBeacon.Draw memory _draw, IPrizeDistributionBuffer.PrizeDistribution memory _prizeDistribution)
         external
         onlyManagerOrOwner
     {
         timelock.lock(_draw.drawId);
-        drawHistory.pushDraw(_draw);
-        prizeDistributionHistory.pushPrizeDistribution(_draw.drawId, _prizeDistribution);
+        DrawBuffer.pushDraw(_draw);
+        prizeDistributionBuffer.pushPrizeDistribution(_draw.drawId, _prizeDistribution);
         emit DrawAndPrizeDistributionPushed(_draw.drawId, _draw, _prizeDistribution);
     }
 }

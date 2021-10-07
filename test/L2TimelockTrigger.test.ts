@@ -3,7 +3,7 @@ import { deployMockContract, MockContract } from 'ethereum-waffle';
 import { ethers, artifacts } from 'hardhat';
 import { Contract, ContractFactory } from 'ethers';
 
-import { newDrawSettings } from './helpers/drawSettings';
+import { newPrizeDistribution } from './helpers/prizeDistribution';
 
 const { getSigners } = ethers;
 
@@ -13,9 +13,9 @@ describe('L2TimelockTrigger', () => {
 
     let l2TimelockTrigger: Contract;
 
-    let prizeDistributionHistory: MockContract;
+    let prizeDistributionBuffer: MockContract;
     let drawCalculatorTimelock: MockContract;
-    let drawHistory: MockContract;
+    let DrawBuffer: MockContract;
 
     let l2TimelockTriggerFactory: ContractFactory;
 
@@ -23,10 +23,10 @@ describe('L2TimelockTrigger', () => {
         [wallet1, wallet2] = await getSigners();
 
         const PrizeDistributionBuffer = await artifacts.readArtifact('IPrizeDistributionBuffer');
-        prizeDistributionHistory = await deployMockContract(wallet1, PrizeDistributionBuffer.abi);
+        prizeDistributionBuffer = await deployMockContract(wallet1, PrizeDistributionBuffer.abi);
 
-        const DrawHistory = await artifacts.readArtifact('IDrawHistory');
-        drawHistory = await deployMockContract(wallet1, DrawHistory.abi);
+        const DrawBufferArtifact = await artifacts.readArtifact('IDrawBuffer');
+        DrawBuffer = await deployMockContract(wallet1, DrawBufferArtifact.abi);
 
         const DrawCalculatorTimelock = await artifacts.readArtifact('DrawCalculatorTimelock');
         drawCalculatorTimelock = await deployMockContract(wallet1, DrawCalculatorTimelock.abi);
@@ -35,8 +35,8 @@ describe('L2TimelockTrigger', () => {
 
         l2TimelockTrigger = await l2TimelockTriggerFactory.deploy(
             wallet1.address,
-            drawHistory.address,
-            prizeDistributionHistory.address,
+            DrawBuffer.address,
+            prizeDistributionBuffer.address,
             drawCalculatorTimelock.address,
         );
     });
@@ -46,15 +46,15 @@ describe('L2TimelockTrigger', () => {
             await expect(l2TimelockTrigger.deployTransaction)
                 .to.emit(l2TimelockTrigger, 'Deployed')
                 .withArgs(
-                    drawHistory.address,
-                    prizeDistributionHistory.address,
+                    DrawBuffer.address,
+                    prizeDistributionBuffer.address,
                     drawCalculatorTimelock.address,
                 );
 
-            expect(await l2TimelockTrigger.drawHistory()).to.equal(drawHistory.address);
+            expect(await l2TimelockTrigger.DrawBuffer()).to.equal(DrawBuffer.address);
 
-            expect(await l2TimelockTrigger.prizeDistributionHistory()).to.equal(
-                prizeDistributionHistory.address,
+            expect(await l2TimelockTrigger.prizeDistributionBuffer()).to.equal(
+                prizeDistributionBuffer.address,
             );
             expect(await l2TimelockTrigger.timelock()).to.equal(drawCalculatorTimelock.address);
         });
@@ -70,16 +70,16 @@ describe('L2TimelockTrigger', () => {
         };
 
         it('should allow a push when no push has happened', async () => {
-            await drawHistory.mock.pushDraw.returns(draw.drawId);
-            await prizeDistributionHistory.mock.pushPrizeDistribution.returns(true);
+            await DrawBuffer.mock.pushDraw.returns(draw.drawId);
+            await prizeDistributionBuffer.mock.pushPrizeDistribution.returns(true);
             await drawCalculatorTimelock.mock.lock.withArgs(0).returns(true);
-            await expect(l2TimelockTrigger.push(draw, newDrawSettings()))
+            await expect(l2TimelockTrigger.push(draw, newPrizeDistribution()))
                 .to.emit(l2TimelockTrigger, 'DrawAndPrizeDistributionPushed');
         });
 
         it('should not allow a push from a non-owner', async () => {
             await expect(
-                l2TimelockTrigger.connect(wallet2).push(draw, newDrawSettings()),
+                l2TimelockTrigger.connect(wallet2).push(draw, newPrizeDistribution()),
             ).to.be.revertedWith('Manageable/caller-not-manager-or-owner');
         });
 
@@ -88,10 +88,10 @@ describe('L2TimelockTrigger', () => {
                 .withArgs(0)
                 .revertsWithReason('OM/timelock-not-expired');
 
-            await drawHistory.mock.pushDraw.returns(draw.drawId);
-            await prizeDistributionHistory.mock.pushPrizeDistribution.returns(true);
+            await DrawBuffer.mock.pushDraw.returns(draw.drawId);
+            await prizeDistributionBuffer.mock.pushPrizeDistribution.returns(true);
 
-            await expect(l2TimelockTrigger.push(draw, newDrawSettings())).to.be.revertedWith(
+            await expect(l2TimelockTrigger.push(draw, newPrizeDistribution())).to.be.revertedWith(
                 'OM/timelock-not-expired',
             );
         });

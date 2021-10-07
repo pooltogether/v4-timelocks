@@ -1,10 +1,10 @@
 import { BigNumber } from "@ethersproject/bignumber";
 import { ethers } from "hardhat";
 
-type DrawCalculatorSettings = {
+type PrizeDistribution = {
     matchCardinality: BigNumber;
     numberOfPicks: BigNumber;
-    distributions: BigNumber[];
+    tiers: BigNumber[];
     bitRangeSize: BigNumber;
     prize: BigNumber;
     startTimestampOffset: BigNumber;
@@ -14,10 +14,10 @@ type DrawCalculatorSettings = {
 
 const ZERO_DISTRIBUTIONS = new Array(16).fill(0);
 
-const drawSettings: DrawCalculatorSettings = {
+const prizeDistribution: PrizeDistribution = {
     matchCardinality: BigNumber.from(5),
     numberOfPicks: ethers.utils.parseEther("1"),
-    distributions: ZERO_DISTRIBUTIONS,
+    tiers: ZERO_DISTRIBUTIONS,
     bitRangeSize: BigNumber.from(3),
     prize: ethers.utils.parseEther("100"),
     startTimestampOffset: BigNumber.from(0),
@@ -25,12 +25,12 @@ const drawSettings: DrawCalculatorSettings = {
     maxPicksPerUser: BigNumber.from(10),
 };
 
-export const newDrawSettings = (cardinality: number = 5): any => {
+export const newPrizeDistribution = (cardinality: number = 5): any => {
     const distributions = [...ZERO_DISTRIBUTIONS];
     distributions[0] = ethers.utils.parseUnits("0.5", 9);
 
     return {
-        ...drawSettings,
+        ...prizeDistribution,
         distributions,
         matchCardinality: BigNumber.from(cardinality),
     };

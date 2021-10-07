@@ -10,7 +10,7 @@ import "./interfaces/IDrawCalculatorTimelock.sol";
   * @title  PoolTogether V4 OracleTimelock
   * @author PoolTogether Inc Team
   * @notice OracleTimelock(s) acts as an intermediary between multiple V4 smart contracts.
-            The OracleTimelock is responsible for pushing Draws to a DrawHistory and routing
+            The OracleTimelock is responsible for pushing Draws to a DrawBuffer and routing
             claim requests from a PrizeDistributor to a DrawCalculator. The primary objective is
             to include a "cooldown" period for all new Draws. Allowing the correction of a
             maliciously set Draw in the unfortunate event an Owner is compromised.
@@ -62,7 +62,7 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
         address user,
         uint32[] calldata drawIds,
         bytes calldata data
-    ) external view override returns (uint256[] memory) {
+    ) external view override returns (uint256[] memory, bytes memory) {
         Timelock memory _timelock = timelock;
 
         for (uint256 i = 0; i < drawIds.length; i++) {

@@ -41,7 +41,7 @@ interface IDrawCalculatorTimelock {
         address user,
         uint32[] calldata drawIds,
         bytes calldata data
-    ) external view returns (uint256[] memory);
+    ) external view returns (uint256[] memory, bytes memory);
 
     /**
      * @notice Lock passed draw id for `timelockDuration` seconds.
