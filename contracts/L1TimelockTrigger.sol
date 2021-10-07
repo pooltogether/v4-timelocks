@@ -4,7 +4,7 @@ pragma solidity 0.8.6;
 
 import "@pooltogether/owner-manager-contracts/contracts/Manageable.sol";
 
-import "@pooltogether/v4-core/contracts/interfaces/IPrizeDistributionHistory.sol";
+import "@pooltogether/v4-core/contracts/interfaces/IPrizeDistributionBuffer.sol";
 
 import "./interfaces/IDrawCalculatorTimelock.sol";
 
@@ -24,7 +24,7 @@ contract L1TimelockTrigger is Manageable {
     /// @param prizeDistributionHistory The address of the prize distribution history contract.
     /// @param timelock The address of the DrawCalculatorTimelock
     event Deployed(
-        IPrizeDistributionHistory indexed prizeDistributionHistory,
+        IPrizeDistributionBuffer indexed prizeDistributionHistory,
         IDrawCalculatorTimelock indexed timelock
     );
 
@@ -38,8 +38,8 @@ contract L1TimelockTrigger is Manageable {
 
     /* ============ Global Variables ============ */
 
-    /// @notice Internal PrizeDistributionHistory reference.
-    IPrizeDistributionHistory public immutable prizeDistributionHistory;
+    /// @notice Internal PrizeDistributionBuffer reference.
+    IPrizeDistributionBuffer public immutable prizeDistributionHistory;
 
     /// @notice Timelock struct reference.
     IDrawCalculatorTimelock public timelock;
@@ -49,12 +49,12 @@ contract L1TimelockTrigger is Manageable {
     /**
      * @notice Initialize L1TimelockTrigger smart contract.
      * @param _owner                    Address of the L1TimelockTrigger owner.
-     * @param _prizeDistributionHistory PrizeDistributionHistory address
+     * @param _prizeDistributionHistory PrizeDistributionBuffer address
      * @param _timelock                 Elapsed seconds before new Draw is available
      */
     constructor(
         address _owner,
-        IPrizeDistributionHistory _prizeDistributionHistory,
+        IPrizeDistributionBuffer _prizeDistributionHistory,
         IDrawCalculatorTimelock _timelock
     ) Ownable(_owner) {
         prizeDistributionHistory = _prizeDistributionHistory;

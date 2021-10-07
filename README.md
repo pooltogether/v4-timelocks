@@ -34,10 +34,10 @@ Both L1TimelockTrigger/L2TimelockTrigger contracts set a timelock or a "cooldown
  A cooldown period for the most recent Draw to be automatically valid after a "challenge" period has elapsed. The PoolTogether operations team will monitor the timelock contract for illicit draw settings be added to the history.
 
 ### L1TimelockTrigger
-The `L1TimelockTrigger` contract pushes `DrawLib.Draw` and `DrawLib.PrizeDistribution` params onto the `DrawHistory` and `PrizeDistributionHistory` contracts.
+The `L1TimelockTrigger` contract pushes `DrawLib.Draw` and `DrawLib.PrizeDistribution` params onto the `DrawHistory` and `PrizeDistributionBuffer` contracts.
 
 ### L2TimelockTrigger
-The `L2TimelockTrigger` pushes `DrawLib.PrizeDistribution` params onto a `PrizeDistributionHistory` contract.
+The `L2TimelockTrigger` pushes `DrawLib.PrizeDistribution` params onto a `PrizeDistributionBuffer` contract.
 
 **Core and Timelock contracts:**
 

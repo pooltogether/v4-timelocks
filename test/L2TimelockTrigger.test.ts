@@ -22,8 +22,8 @@ describe('L2TimelockTrigger', () => {
     beforeEach(async () => {
         [wallet1, wallet2] = await getSigners();
 
-        const PrizeDistributionHistory = await artifacts.readArtifact('IPrizeDistributionHistory');
-        prizeDistributionHistory = await deployMockContract(wallet1, PrizeDistributionHistory.abi);
+        const PrizeDistributionBuffer = await artifacts.readArtifact('IPrizeDistributionBuffer');
+        prizeDistributionHistory = await deployMockContract(wallet1, PrizeDistributionBuffer.abi);
 
         const DrawHistory = await artifacts.readArtifact('IDrawHistory');
         drawHistory = await deployMockContract(wallet1, DrawHistory.abi);

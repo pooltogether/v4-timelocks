@@ -4,7 +4,7 @@ pragma solidity 0.8.6;
 
 import "@pooltogether/owner-manager-contracts/contracts/Manageable.sol";
 
-import "@pooltogether/v4-core/contracts/interfaces/IPrizeDistributionHistory.sol";
+import "@pooltogether/v4-core/contracts/interfaces/IPrizeDistributionBuffer.sol";
 import "@pooltogether/v4-core/contracts/interfaces/IDrawHistory.sol";
 
 import "./interfaces/IDrawCalculatorTimelock.sol";
@@ -23,7 +23,7 @@ contract L2TimelockTrigger is Manageable {
     /// @notice Emitted when the contract is deployed.
     event Deployed(
         IDrawHistory indexed drawHistory,
-        IPrizeDistributionHistory indexed prizeDistributionHistory,
+        IPrizeDistributionBuffer indexed prizeDistributionHistory,
         IDrawCalculatorTimelock indexed timelock
     );
 
@@ -38,8 +38,8 @@ contract L2TimelockTrigger is Manageable {
     /// @notice The DrawHistory contract address.
     IDrawHistory public immutable drawHistory;
 
-    /// @notice Internal PrizeDistributionHistory reference.
-    IPrizeDistributionHistory public immutable prizeDistributionHistory;
+    /// @notice Internal PrizeDistributionBuffer reference.
+    IPrizeDistributionBuffer public immutable prizeDistributionHistory;
 
     /// @notice Timelock struct reference.
     IDrawCalculatorTimelock public timelock;
@@ -49,14 +49,14 @@ contract L2TimelockTrigger is Manageable {
     /**
      * @notice Initialize L2TimelockTrigger smart contract.
      * @param _owner                       Address of the L2TimelockTrigger owner.
-     * @param _prizeDistributionHistory PrizeDistributionHistory address
+     * @param _prizeDistributionHistory PrizeDistributionBuffer address
      * @param _drawHistory                DrawHistory address
      * @param _timelock           Elapsed seconds before new Draw is available
      */
     constructor(
         address _owner,
         IDrawHistory _drawHistory,
-        IPrizeDistributionHistory _prizeDistributionHistory,
+        IPrizeDistributionBuffer _prizeDistributionHistory,
         IDrawCalculatorTimelock _timelock
     ) Ownable(_owner) {
         drawHistory = _drawHistory;
