@@ -46,7 +46,7 @@ describe('L2TimelockTrigger', () => {
             await expect(l2TimelockTrigger.deployTransaction)
                 .to.emit(l2TimelockTrigger, 'Deployed')
                 .withArgs(
-                    DrawBuffer.address,
+                    drawBuffer.address,
                     prizeDistributionBuffer.address,
                     drawCalculatorTimelock.address,
                 );
