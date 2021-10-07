@@ -19,7 +19,7 @@ contract L2TimelockTrigger is Manageable {
     
     /// @notice Emitted when the contract is deployed.
     event Deployed(
-        IDrawBuffer indexed DrawBuffer,
+        IDrawBuffer indexed drawBuffer,
         IPrizeDistributionBuffer indexed prizeDistributionBuffer,
         IDrawCalculatorTimelock indexed timelock
     );
