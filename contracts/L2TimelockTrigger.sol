@@ -70,7 +70,7 @@ contract L2TimelockTrigger is Manageable {
      * @notice Push Draw onto draws ring buffer history.
      * @dev    Restricts new draws by forcing a push timelock.
      * @param _draw              Draw struct from IDrawBeacon
-     * @param _prizeDistribution PrizeDistribution struct frmo IPrizeDistributionBuffer
+     * @param _prizeDistribution PrizeDistribution struct from IPrizeDistributionBuffer
      */
     function push(IDrawBeacon.Draw memory _draw, IPrizeDistributionBuffer.PrizeDistribution memory _prizeDistribution)
         external
