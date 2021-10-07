@@ -17,7 +17,7 @@ contract L1TimelockTrigger is Manageable {
     /* ============ Events ============ */
 
     /// @notice Emitted when the contract is deployed.
-    /// @param prizeDistributionBuffer The address of the prize distribution history contract.
+    /// @param prizeDistributionBuffer The address of the prize distribution buffer contract.
     /// @param timelock The address of the DrawCalculatorTimelock
     event Deployed(
         IPrizeDistributionBuffer indexed prizeDistributionBuffer,
