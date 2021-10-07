@@ -35,7 +35,7 @@ describe('L2TimelockTrigger', () => {
 
         l2TimelockTrigger = await l2TimelockTriggerFactory.deploy(
             wallet1.address,
-            DrawBuffer.address,
+            drawBuffer.address,
             prizeDistributionBuffer.address,
             drawCalculatorTimelock.address,
         );
