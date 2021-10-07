@@ -56,11 +56,11 @@ contract L2TimelockTrigger is Manageable {
         IPrizeDistributionBuffer _prizeDistributionBuffer,
         IDrawCalculatorTimelock _timelock
     ) Ownable(_owner) {
-        DrawBuffer = _DrawBuffer;
+        drawBuffer = _drawBuffer;
         prizeDistributionBuffer = _prizeDistributionBuffer;
         timelock = _timelock;
 
-        emit Deployed(_DrawBuffer, _prizeDistributionBuffer, _timelock);
+        emit Deployed(_drawBuffer, _prizeDistributionBuffer, _timelock);
     }
 
     /* ============ External Functions ============ */
@@ -76,7 +76,7 @@ contract L2TimelockTrigger is Manageable {
         onlyManagerOrOwner
     {
         timelock.lock(_draw.drawId);
-        DrawBuffer.pushDraw(_draw);
+        drawBuffer.pushDraw(_draw);
         prizeDistributionBuffer.pushPrizeDistribution(_draw.drawId, _prizeDistribution);
         emit DrawAndPrizeDistributionPushed(_draw.drawId, _draw, _prizeDistribution);
     }
