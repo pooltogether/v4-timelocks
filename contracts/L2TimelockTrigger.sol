@@ -52,7 +52,7 @@ contract L2TimelockTrigger is Manageable {
      */
     constructor(
         address _owner,
-        IDrawBuffer _DrawBuffer,
+        IDrawBuffer _drawBuffer,
         IPrizeDistributionBuffer _prizeDistributionBuffer,
         IDrawCalculatorTimelock _timelock
     ) Ownable(_owner) {
