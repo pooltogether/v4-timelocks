@@ -1,11 +1,11 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.11/libexec/bin/yarn.js
+  /Users/admin/.nvm/versions/node/v16.9.0/bin/node /usr/local/Cellar/yarn/1.19.1/libexec/bin/yarn.js
 
 PATH: 
-  /usr/local/opt/go/libexec/bin:/Users/pierrick/.rvm/gems/ruby-2.5.0/bin:/Users/pierrick/.rvm/gems/ruby-2.5.0@global/bin:/Users/pierrick/.rvm/rubies/ruby-2.5.0/bin:/usr/local/opt/python/libexec/bin:/usr/local/Cellar/pyenv-virtualenv/1.1.5/shims:/Users/pierrick/.pyenv/shims:/Users/pierrick/.pyenv/bin:/Users/pierrick/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/pierrick/.antigen/bundles/mattberther/zsh-pyenv:/Users/pierrick/.antigen/bundles/zsh-users/zsh-autosuggestions:/Users/pierrick/.antigen/bundles/zsh-users/zsh-completions:/Users/pierrick/.antigen/bundles/zsh-users/zsh-syntax-highlighting:/Users/pierrick/go:/usr/local/opt/go/libexec/bin:/usr/local/opt/fzf/bin:/Users/pierrick/.rvm/bin
+  /Users/admin/torch/install/bin:/Applications/CMake.app/Contents/bin:/.node-gyp/10.16.3/inclide/node/:/Users/admin/Library/Python/2.7/bin/:/Users/admin/.cargo/bin/:/Users/admin/.rustup/bin/:/usr/local/Caskroom/:/usr/local/Cellar/:/usr/local/Homebrew/:/Users/admin/.ssh/id_rsa:/Users/admin/w3m/:/Users/admin/SDK/flutter/bin:/Applications/Postgres.app/Contents/Versions/latest/bin:/Users/admin/.nvm/versions/node/v16.9.0/bin:/Users/admin/bin:/usr/local/bin:/Users/admin/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Postgres.app/Contents/Versions/latest/bin:/Users/admin/Library/Android/sdk/emulator:/Users/admin/Library/Android/sdk/tools:/Users/admin/Library/Android/sdk/tools/bin:/Users/admin/Library/Android/sdk/platform-tools
 
 Yarn version: 
-  1.22.11
+  1.19.1
 
 Node version: 
   16.9.0
@@ -14,12 +14,16 @@ Platform:
   darwin x64
 
 Trace: 
-  SyntaxError: /Users/pierrick/Documents/01-Work/00-PoolTogether/01-Repositories/v4-oracle-timelocks/package.json: Unexpected token } in JSON at position 1608
-      at JSON.parse (<anonymous>)
-      at /usr/local/Cellar/yarn/1.22.11/libexec/lib/cli.js:1625:59
+  SyntaxError: Invalid value type 871:0 in /Users/admin/Documents/GitHub/POOLTogether/backend/v4-timelocks/yarn.lock
+      at Parser.unexpected (/usr/local/Cellar/yarn/1.19.1/libexec/lib/cli.js:64293:11)
+      at Parser.parse (/usr/local/Cellar/yarn/1.19.1/libexec/lib/cli.js:64421:16)
+      at Parser.parse (/usr/local/Cellar/yarn/1.19.1/libexec/lib/cli.js:64398:26)
+      at parse (/usr/local/Cellar/yarn/1.19.1/libexec/lib/cli.js:64496:19)
+      at module.exports.exports.default (/usr/local/Cellar/yarn/1.19.1/libexec/lib/cli.js:64060:96)
+      at Function.<anonymous> (/usr/local/Cellar/yarn/1.19.1/libexec/lib/cli.js:3064:63)
       at Generator.next (<anonymous>)
-      at step (/usr/local/Cellar/yarn/1.22.11/libexec/lib/cli.js:310:30)
-      at /usr/local/Cellar/yarn/1.22.11/libexec/lib/cli.js:321:13
+      at step (/usr/local/Cellar/yarn/1.19.1/libexec/lib/cli.js:304:30)
+      at /usr/local/Cellar/yarn/1.19.1/libexec/lib/cli.js:315:13
 
 npm manifest: 
   {
@@ -36,7 +40,7 @@ npm manifest:
       "verify": "hardhat etherscan-verify --license MIT --solc-input --network",
       "etherscan-verify": "hardhat etherscan:verify --network",
       "etherscan-verify-polygon": "hardhat --config hardhat.config.polygon.js run ./scripts/verify.js --network",
-      "format": "prettier --config .prettierrc --write **/*.*.{ts,js} \"contracts/**/*.sol\"",
+      "format": "prettier --config .prettierrc --write \"**/*.{ts,js}\" \"contracts/**/*.sol\"",
       "format:file": "prettier --config .prettierrc --write",
       "hint": "solhint \"contracts/**/*.sol\"",
       "start-fork": "FORK_ENABLED=true hardhat node --no-reset --no-deploy",
@@ -46,10 +50,9 @@ npm manifest:
       "run-fork": "yarn impersonate-accounts && yarn distribute-ether && yarn create-prize-pool",
       "test": "yarn clean && HIDE_DEPLOY_LOG=true OPTIMIZER_DISABLED=true hardhat test"
     },
-    "dependencies": {},
-    "peerDependencies": {
+    "dependencies": {
       "@pooltogether/owner-manager-contracts": "1.1.0",
-      "@pooltogether/v4-core": "https://github.com/pooltogether/v4-core.git",
+      "@pooltogether/v4-core": "https://github.com/pooltogether/v4-core.git"
     },
     "devDependencies": {
       "@nomiclabs/hardhat-ethers": "2.0.2",
@@ -57,7 +60,7 @@ npm manifest:
       "@nomiclabs/hardhat-waffle": "2.0.1",
       "@openzeppelin/hardhat-upgrades": "1.6.0",
       "@pooltogether/owner-manager-contracts": "1.1.0",
-      "@pooltogether/pooltogether-proxy-factory-package": "^1.0.1",
+      "@pooltogether/pooltogether-proxy-factory-package": "1.0.1",
       "@types/chai": "4.2.15",
       "@types/debug": "4.1.5",
       "@types/mocha": "8.2.1",
@@ -1048,7 +1051,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/@pooltogether/owner-manager-contracts/-/owner-manager-contracts-1.1.0.tgz#776f1b96a81cec05bfe6575583b4b239a4038fa9"
     integrity sha512-1PqkzSE/AJ4luGhpEfaN9YnHI7mbe63zy92iXgNwHJ4XDqerm+hfJsggrXK7BUyUkAIFLFf8+Ol0TntZAUTedw==
   
-  "@pooltogether/pooltogether-proxy-factory-package@^1.0.1":
+  "@pooltogether/pooltogether-proxy-factory-package@1.0.1":
     version "1.0.1"
     resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-proxy-factory-package/-/pooltogether-proxy-factory-package-1.0.1.tgz#c096ac0b56e97716f1974efca7887364ebb67fb2"
     integrity sha512-zG6ikHCmHOztrlXTba0CMlxs1XW0FnOXVVBLdegfhB+Onho//JMSxkrK9/Kwx0NMNx2wn5+QwGOL/mDQbIqYmQ==
@@ -1056,17 +1059,7 @@ Lockfile:
   "@pooltogether/pooltogether-rng-contracts@1.4.0":
     version "1.4.0"
     resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-rng-contracts/-/pooltogether-rng-contracts-1.4.0.tgz#310b9667a1123cfcce718aa6d8eba7c434a53c75"
-    integrity sha512-dNgDpDsCMxUxaz8u6OfpjSBtMOdcp8QkLC3cwJ6E++4ux0qY2ON+ZqJEHIC3q4ZVJ4Xf6FikMJF0a8SVNtl8Zw==
-  
-  "@pooltogether/v4-core@github://pooltogether/v4-core":
-    version "1.0.0-beta.1"
-    resolved "git+ssh://git@github.com/pooltogether/v4-core.git#554d8d81f154a7d53d9d10f1f9d695c57292e83b"
-    dependencies:
-      "@openzeppelin/contracts" "^4.3.1"
-      "@pooltogether/fixed-point" "1.0.0"
-      "@pooltogether/owner-manager-contracts" "1.1.0"
-      "@pooltogether/pooltogether-rng-contracts" "1.4.0"
-      "@pooltogether/yield-source-interface" "1.0.2"
+    integrity sha512-dNgDpDsCMxUxaz8u6OfpjSBtMOdcp8QkLC3cwJ6E++4ux0qY2ON+ZqJEHIC3q4ZVJ4Xf6FikMJF0a8SVNtl8Zw==terface" "1.0.2"
       deploy-eip-1820 "1.0.0"
   
   "@pooltogether/yield-source-interface@1.0.2":

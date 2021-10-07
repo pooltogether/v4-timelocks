@@ -165,9 +165,9 @@ describe('DrawCalculatorTimelock', () => {
 
     describe('calculate()', () => {
         it('should do nothing if no timelock is set', async () => {
-            await drawCalculator.mock.calculate.withArgs(wallet1.address, [0], '0x').returns([43]);
+            await drawCalculator.mock.calculate.withArgs(wallet1.address, [0], '0x').returns([43], '0x');
             const result = await drawCalculatorTimelock.calculate(wallet1.address, [0], '0x');
-            expect(result[0]).to.equal('43');
+            expect(result[0][0]).to.equal('43');
         });
 
         context('with timelock set', () => {
@@ -191,7 +191,7 @@ describe('DrawCalculatorTimelock', () => {
             it('should pass for draws that are not locked', async () => {
                 await drawCalculator.mock.calculate
                     .withArgs(wallet1.address, [0, 2], '0x')
-                    .returns([44, 5]);
+                    .returns([44, 5], '0x');
 
                 const result = await drawCalculatorTimelock.calculate(
                     wallet1.address,
@@ -199,8 +199,8 @@ describe('DrawCalculatorTimelock', () => {
                     '0x',
                 );
 
-                expect(result[0]).to.equal('44');
-                expect(result[1]).to.equal('5');
+                expect(result[0][0]).to.equal('44');
+                expect(result[0][1]).to.equal('5');
             });
         });
     });

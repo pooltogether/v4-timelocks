@@ -26,18 +26,16 @@ https://docs.pooltogether.com
 Timelock contracts assist with Phase 1 in the roll-out of V4. Granting authority to the operrations teams to prevent a "bad actor" oracle from incorrectly setting a draw or prize distribution params. 
 
 ### DrawCalculatorTimelock
-The DrawCalculatorTimelock adds a timelock for DrawPrizes to execute a claim with the most recently pushed PrizeDistribution params pushed. 
+The DrawCalculatorTimelock adds a timelock for PrizeDistributor to execute a claim with the most recently pushed PrizeDistribution params pushed. 
 
 ### L1TimelockTrigger & L2TimelockTrigger
-Both L1TimelockTrigger/L2TimelockTrigger contracts set a timelock or a "cooldown" period in the linked `DrawCalculatorTimelock` contract. The `DrawCalculatorTimelock` routes `calculate` execution through a `DrawCalculator` contract for the linked `DrawPrize` contract.
-
- A cooldown period for the most recent Draw to be automatically valid after a "challenge" period has elapsed. The PoolTogether operations team will monitor the timelock contract for illicit draw settings be added to the history.
+Both L1TimelockTrigger/L2TimelockTrigger contracts set a timelock or a "cooldown" period in the linked `DrawCalculatorTimelock` contract. The `DrawCalculatorTimelock` routes `calculate` execution through a `DrawCalculator` contract for the linked `PrizeDistributor` contract.
 
 ### L1TimelockTrigger
-The `L1TimelockTrigger` contract pushes `DrawLib.Draw` and `DrawLib.PrizeDistribution` params onto the `DrawHistory` and `PrizeDistributionHistory` contracts.
+The `L1TimelockTrigger` contract pushes `DrawLib.Draw` and `DrawLib.PrizeDistribution` params onto the `DrawBuffer` and `PrizeDistributionBuffer` contracts.
 
 ### L2TimelockTrigger
-The `L2TimelockTrigger` pushes `DrawLib.PrizeDistribution` params onto a `PrizeDistributionHistory` contract.
+The `L2TimelockTrigger` pushes `DrawLib.PrizeDistribution` params onto a `PrizeDistributionBuffer` contract.
 
 **Core and Timelock contracts:**
 
