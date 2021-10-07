@@ -47,7 +47,7 @@ contract L2TimelockTrigger is Manageable {
      * @notice Initialize L2TimelockTrigger smart contract.
      * @param _owner                       Address of the L2TimelockTrigger owner.
      * @param _prizeDistributionBuffer PrizeDistributionBuffer address
-     * @param _DrawBuffer                DrawBuffer address
+     * @param _drawBuffer                DrawBuffer address
      * @param _timelock           Elapsed seconds before new Draw is available
      */
     constructor(
