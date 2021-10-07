@@ -88,7 +88,7 @@ describe('L2TimelockTrigger', () => {
                 .withArgs(0)
                 .revertsWithReason('OM/timelock-not-expired');
 
-            await DrawBuffer.mock.pushDraw.returns(draw.drawId);
+            await drawBuffer.mock.pushDraw.returns(draw.drawId);
             await prizeDistributionBuffer.mock.pushPrizeDistribution.returns(true);
 
             await expect(l2TimelockTrigger.push(draw, newPrizeDistribution())).to.be.revertedWith(
