@@ -76,13 +76,13 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
     }
 
     /// @inheritdoc IDrawCalculatorTimelock
-    function lock(uint32 _drawId, uint32 _timestamp) external override onlyManagerOrOwner returns (bool) {
+    function lock(uint32 _drawId, uint64 _timestamp) external override onlyManagerOrOwner returns (bool) {
         Timelock memory _timelock = timelock;
         require(_drawId == _timelock.drawId + 1, "OM/not-drawid-plus-one");
 
         _requireTimelockElapsed(_timelock);
         timelock = Timelock({ drawId: _drawId, timestamp: _timestamp });
-        emit LockedDraw(_drawId, uint32(_timestamp));
+        emit LockedDraw(_drawId, _timestamp);
 
         return true;
     }

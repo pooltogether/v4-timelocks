@@ -70,7 +70,7 @@ contract L1TimelockTrigger is Manageable {
         onlyManagerOrOwner
     {   
         // Locks the new PrizeDistribution according to the Draw endtime.
-        timelock.lock(_draw.drawId, uint32(_draw.timestamp + _draw.beaconPeriodSeconds));
+        timelock.lock(_draw.drawId, _draw.timestamp + _draw.beaconPeriodSeconds);
         prizeDistributionBuffer.pushPrizeDistribution(_draw.drawId, _prizeDistribution);
         emit PrizeDistributionPushed(_draw.drawId, _prizeDistribution);
     }

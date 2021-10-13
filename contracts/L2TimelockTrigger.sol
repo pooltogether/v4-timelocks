@@ -76,7 +76,7 @@ contract L2TimelockTrigger is Manageable {
         external
         onlyManagerOrOwner
     {
-        timelock.lock(_draw.drawId, uint32(_draw.timestamp + _draw.beaconPeriodSeconds));
+        timelock.lock(_draw.drawId, _draw.timestamp + _draw.beaconPeriodSeconds);
         drawBuffer.pushDraw(_draw);
         prizeDistributionBuffer.pushPrizeDistribution(_draw.drawId, _prizeDistribution);
         emit DrawAndPrizeDistributionPushed(_draw.drawId, _draw, _prizeDistribution);

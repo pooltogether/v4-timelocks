@@ -12,7 +12,7 @@ interface IDrawCalculatorTimelock {
         * @param drawId    The Draw to unlock
      */
     struct Timelock {
-        uint128 timestamp;
+        uint64 timestamp;
         uint32 drawId;
     }
 
@@ -21,7 +21,7 @@ interface IDrawCalculatorTimelock {
      * @param drawId    Draw ID
      * @param timestamp Block timestamp
      */
-    event LockedDraw(uint32 indexed drawId, uint32 timestamp);
+    event LockedDraw(uint32 indexed drawId, uint64 timestamp);
 
     /**
      * @notice Emitted event when the timelock struct is updated
@@ -56,7 +56,7 @@ interface IDrawCalculatorTimelock {
      * @param _timestamp Epoch timestamp to unlock the draw.
      * @return True if operation was successful.
      */
-    function lock(uint32 _drawId, uint32 _timestamp) external returns (bool);
+    function lock(uint32 _drawId, uint64 _timestamp) external returns (bool);
 
     /**
      * @notice Read internal DrawCalculator variable.
