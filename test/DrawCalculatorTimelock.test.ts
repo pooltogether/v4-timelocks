@@ -100,16 +100,18 @@ describe('DrawCalculatorTimelock', () => {
             await drawCalculatorTimelock.setTimelock(timelock);
         });
 
-        it('should lock next draw id', async () => {
+        it('should lock next draw id and set the unlock timestamp', async () => {
             await increaseTime(timelockDuration + 1);
-            await expect(drawCalculatorTimelock.lock(2, (await getBlock('latest')).timestamp + 1))
+
+            // Locks Draw ID 2 and set the unlock timestamp to occur in 100 seconds.
+            await expect(drawCalculatorTimelock.lock(2, (await getBlock('latest')).timestamp + 100))
                 .to.emit(drawCalculatorTimelock, 'LockedDraw')
 
             const timelock = await drawCalculatorTimelock.getTimelock();
             const currentTimestamp = (await getBlock('latest')).timestamp;
 
             expect(timelock.drawId).to.equal(2);
-            expect(timelock.timestamp).to.equal(currentTimestamp);
+            expect(timelock.timestamp).to.equal(currentTimestamp + 99);
         });
 
         it('should lock next draw id if manager', async () => {
