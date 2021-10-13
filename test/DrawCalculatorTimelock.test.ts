@@ -102,7 +102,7 @@ describe('DrawCalculatorTimelock', () => {
 
         it('should lock next draw id', async () => {
             await increaseTime(timelockDuration + 1);
-            await expect(drawCalculatorTimelock.lock(2))
+            await expect(drawCalculatorTimelock.lock(2, (await getBlock('latest')).timestamp + 1))
                 .to.emit(drawCalculatorTimelock, 'LockedDraw')
 
             const timelock = await drawCalculatorTimelock.getTimelock();
@@ -116,7 +116,7 @@ describe('DrawCalculatorTimelock', () => {
             await drawCalculatorTimelock.setManager(wallet2.address);
 
             await increaseTime(timelockDuration + 1);
-            await drawCalculatorTimelock.connect(wallet2).lock(2);
+            await drawCalculatorTimelock.connect(wallet2).lock(2, (await getBlock('latest')).timestamp + 1);
 
             const timelock = await drawCalculatorTimelock.getTimelock();
             const currentTimestamp = (await getBlock('latest')).timestamp;
@@ -126,13 +126,13 @@ describe('DrawCalculatorTimelock', () => {
         });
 
         it('should fail if not called by the owner or manager', async () => {
-            await expect(drawCalculatorTimelock.connect(wallet2).lock(1)).to.be.revertedWith(
+            await expect(drawCalculatorTimelock.connect(wallet2).lock(1, (await getBlock('latest')).timestamp)).to.be.revertedWith(
                 'Manageable/caller-not-manager-or-owner',
             );
         });
 
         it('should fail to lock if trying to lock current or previous draw id', async () => {
-            await expect(drawCalculatorTimelock.lock(1)).to.be.revertedWith(
+            await expect(drawCalculatorTimelock.lock(1, (await getBlock('latest')).timestamp)).to.be.revertedWith(
                 'OM/not-drawid-plus-one',
             );
         });

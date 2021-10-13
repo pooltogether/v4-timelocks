@@ -62,15 +62,16 @@ contract L1TimelockTrigger is Manageable {
     /**
      * @notice Push Draw onto draws ring buffer history.
      * @dev    Restricts new draws by forcing a push timelock.
-     * @param _drawId draw id
-     * @param _prizeDistribution PrizeDistribution parameters
+     * @param _draw Draw struct
+     * @param _prizeDistribution PrizeDistribution struct
      */
-    function push(uint32 _drawId, IPrizeDistributionBuffer.PrizeDistribution memory _prizeDistribution)
+    function push(IDrawBeacon.Draw calldata _draw, IPrizeDistributionBuffer.PrizeDistribution memory _prizeDistribution)
         external
         onlyManagerOrOwner
-    {
-        timelock.lock(_drawId);
-        prizeDistributionBuffer.pushPrizeDistribution(_drawId, _prizeDistribution);
-        emit PrizeDistributionPushed(_drawId, _prizeDistribution);
+    {   
+        // Locks the new PrizeDistribution according to the Draw endtime.
+        timelock.lock(_draw.drawId, uint32(_draw.timestamp + _draw.beaconPeriodSeconds));
+        prizeDistributionBuffer.pushPrizeDistribution(_draw.drawId, _prizeDistribution);
+        emit PrizeDistributionPushed(_draw.drawId, _prizeDistribution);
     }
 }

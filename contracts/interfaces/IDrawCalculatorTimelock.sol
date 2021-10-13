@@ -5,6 +5,12 @@ pragma solidity 0.8.6;
 import "@pooltogether/v4-core/contracts/interfaces/IDrawCalculator.sol";
 
 interface IDrawCalculatorTimelock {
+    
+     /**
+        * @notice Emitted when target draw id is locked.
+        * @param timestamp The epoch timestamp to unlock the current locked Draw
+        * @param drawId    The Draw to unlock
+     */
     struct Timelock {
         uint128 timestamp;
         uint32 drawId;
@@ -47,9 +53,10 @@ interface IDrawCalculatorTimelock {
      * @notice Lock passed draw id for `timelockDuration` seconds.
      * @dev    Restricts new draws by forcing a push timelock.
      * @param _drawId Draw id to lock.
+     * @param _timestamp Epoch timestamp to unlock the draw.
      * @return True if operation was successful.
      */
-    function lock(uint32 _drawId) external returns (bool);
+    function lock(uint32 _drawId, uint32 _timestamp) external returns (bool);
 
     /**
      * @notice Read internal DrawCalculator variable.
