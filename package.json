@@ -1,6 +1,6 @@
 {
   "name": "@pooltogether/v4-timelocks",
-  "version": "1.0.0-beta.4",
+  "version": "1.0.0",
   "description": "PoolTogether V4 Timelocks",
   "main": "index.js",
   "license": "MIT",
