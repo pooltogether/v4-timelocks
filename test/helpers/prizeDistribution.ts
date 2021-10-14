@@ -26,12 +26,12 @@ const prizeDistribution: PrizeDistribution = {
 };
 
 export const newPrizeDistribution = (cardinality: number = 5): any => {
-    const distributions = [...ZERO_DISTRIBUTIONS];
-    distributions[0] = ethers.utils.parseUnits("0.5", 9);
+    const tiers = [...ZERO_DISTRIBUTIONS];
+    tiers[0] = ethers.utils.parseUnits("0.5", 9);
 
     return {
         ...prizeDistribution,
-        distributions,
+        tiers,
         matchCardinality: BigNumber.from(cardinality),
     };
 };
