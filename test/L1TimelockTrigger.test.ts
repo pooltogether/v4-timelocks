@@ -54,26 +54,49 @@ describe('L1TimelockTrigger', () => {
 
     describe('push()', () => {
         it('should allow a push when no push has happened', async () => {
+            const draw = {
+                drawId: 1,
+                timestamp: 22,
+                winningRandomNumber: 333,
+                beaconPeriodStartedAt: 4444,
+                beaconPeriodSeconds: 55555,
+            }
+
             await prizeDistributionBuffer.mock.pushPrizeDistribution.returns(0);
-            await drawCalculatorTimelock.mock.lock.withArgs(0).returns(true);
-            expect(l1TimelockTrigger.push(0, newPrizeDistribution()))
+            await drawCalculatorTimelock.mock.lock.withArgs(draw.drawId, draw.timestamp + draw.beaconPeriodSeconds).returns(true);
+            expect(l1TimelockTrigger.push(draw, newPrizeDistribution()))
                 .to.emit(l1TimelockTrigger, 'PrizeDistributionPushed');
         });
 
         it('should not allow a push from a non-owner', async () => {
+            const draw = {
+                drawId: 1,
+                timestamp: 22,
+                winningRandomNumber: 333,
+                beaconPeriodStartedAt: 4444,
+                beaconPeriodSeconds: 55555,
+            }
             await expect(
-                l1TimelockTrigger.connect(wallet2).push(0, newPrizeDistribution()),
+                l1TimelockTrigger.connect(wallet2).push(draw, newPrizeDistribution()),
             ).to.be.revertedWith('Manageable/caller-not-manager-or-owner');
         });
 
         it('should not allow a push if a draw is still timelocked', async () => {
+            const draw = {
+                drawId: 1,
+                timestamp: 22,
+                winningRandomNumber: 333,
+                beaconPeriodStartedAt: 4444,
+                beaconPeriodSeconds: 55555,
+            }
+
             await drawCalculatorTimelock.mock.lock
-                .withArgs(0)
+                .withArgs(draw.drawId, draw.timestamp + draw.beaconPeriodSeconds)
                 .revertsWithReason('OM/timelock-not-expired');
 
             await prizeDistributionBuffer.mock.pushPrizeDistribution.returns(0);
 
-            await expect(l1TimelockTrigger.push(0, newPrizeDistribution())).to.be.revertedWith(
+            await expect(l1TimelockTrigger.push(draw, newPrizeDistribution())).to.be.revertedWith(
                 'OM/timelock-not-expired',
             );
         });
