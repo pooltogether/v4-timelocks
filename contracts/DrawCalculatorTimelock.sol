@@ -21,9 +21,6 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
     /// @notice Internal DrawCalculator reference.
     IDrawCalculator internal immutable calculator;
 
-    /// @notice Seconds required to elapse before newest Draw is available.
-    uint32 internal timelockDuration;
-
     /// @notice Internal Timelock struct reference.
     Timelock internal timelock;
 
@@ -32,9 +29,8 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
     /**
      * @notice Deployed event when the constructor is called
      * @param drawCalculator DrawCalculator address bound to this timelock
-     * @param timelockDuration Initial timelock duration
      */
-    event Deployed(IDrawCalculator indexed drawCalculator, uint32 timelockDuration);
+    event Deployed(IDrawCalculator indexed drawCalculator);
 
     /* ============ Deploy ============ */
 
@@ -42,17 +38,14 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
      * @notice Initialize DrawCalculatorTimelockTrigger smart contract.
      * @param _owner                       Address of the DrawCalculator owner.
      * @param _calculator                 DrawCalculator address.
-     * @param _timelockDuration           Elapsed seconds before new Draw is available.
      */
     constructor(
         address _owner,
-        IDrawCalculator _calculator,
-        uint32 _timelockDuration
+        IDrawCalculator _calculator
     ) Ownable(_owner) {
         calculator = _calculator;
-        _setTimelockDuration(_timelockDuration);
 
-        emit Deployed(_calculator, _timelockDuration);
+        emit Deployed(_calculator);
     }
 
     /* ============ External Functions ============ */
@@ -98,20 +91,10 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
     }
 
     /// @inheritdoc IDrawCalculatorTimelock
-    function getTimelockDuration() external view override returns (uint32) {
-        return timelockDuration;
-    }
-
-    /// @inheritdoc IDrawCalculatorTimelock
     function setTimelock(Timelock memory _timelock) external override onlyOwner {
         timelock = _timelock;
 
         emit TimelockSet(_timelock);
-    }
-
-    /// @inheritdoc IDrawCalculatorTimelock
-    function setTimelockDuration(uint32 _timelockDuration) external override onlyOwner {
-        _setTimelockDuration(_timelockDuration);
     }
 
     /// @inheritdoc IDrawCalculatorTimelock
@@ -120,14 +103,6 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
     }
 
     /* ============ Internal Functions ============ */
-
-    /**
-     * @notice Set global timelockDuration variable.
-     */
-    function _setTimelockDuration(uint32 _timelockDuration) internal {
-        timelockDuration = _timelockDuration;
-        emit TimelockDurationSet(_timelockDuration);
-    }
 
     /**
      * @notice Read global DrawCalculator variable.
@@ -140,7 +115,7 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
         }
 
         // Otherwise if the timelock has expired, we're good.
-        return (block.timestamp > _timelock.timestamp + timelockDuration);
+        return (block.timestamp > _timelock.timestamp);
     }
 
     /**

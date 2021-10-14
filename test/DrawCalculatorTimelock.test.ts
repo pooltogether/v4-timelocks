@@ -20,8 +20,6 @@ describe('DrawCalculatorTimelock', () => {
 
     let drawCalculatorTimelockFactory: ContractFactory;
 
-    const timelockDuration = 60;
-
     beforeEach(async () => {
         [wallet1, wallet2] = await getSigners();
 
@@ -32,8 +30,7 @@ describe('DrawCalculatorTimelock', () => {
 
         drawCalculatorTimelock = await drawCalculatorTimelockFactory.deploy(
             wallet1.address,
-            drawCalculator.address,
-            timelockDuration,
+            drawCalculator.address
         );
     });
 
@@ -41,36 +38,13 @@ describe('DrawCalculatorTimelock', () => {
         it('should emit Deployed event', async () => {
             await expect(drawCalculatorTimelock.deployTransaction)
                 .to.emit(drawCalculatorTimelock, 'Deployed')
-                .withArgs(drawCalculator.address, timelockDuration);
+                .withArgs(drawCalculator.address);
         });
 
         it('should set the draw calculator', async () => {
             expect(await drawCalculatorTimelock.getDrawCalculator()).to.equal(
                 drawCalculator.address,
             );
-        });
-
-        it('should set the timelock duration', async () => {
-            expect(await drawCalculatorTimelock.getTimelockDuration()).to.equal(timelockDuration);
-        });
-    });
-
-    describe('getTimelockDuration()', () => {
-        it('should return the duration', async () => {
-            expect(await drawCalculatorTimelock.getTimelockDuration()).to.equal(timelockDuration);
-        });
-    });
-
-    describe('setTimelockDuration()', () => {
-        it('should set the duration', async () => {
-            await drawCalculatorTimelock.setTimelockDuration(77);
-            expect(await drawCalculatorTimelock.getTimelockDuration()).to.equal(77);
-        });
-
-        it('should not allow anyone else to set', async () => {
-            await expect(
-                drawCalculatorTimelock.connect(wallet2).setTimelockDuration(66),
-            ).to.be.revertedWith('Ownable/caller-not-owner');
         });
     });
 
@@ -101,7 +75,7 @@ describe('DrawCalculatorTimelock', () => {
         });
 
         it('should lock next draw id and set the unlock timestamp', async () => {
-            await increaseTime(timelockDuration + 1);
+            await increaseTime(61);
 
             // Locks Draw ID 2 and set the unlock timestamp to occur in 100 seconds.
             await expect(drawCalculatorTimelock.lock(2, (await getBlock('latest')).timestamp + 100))
@@ -117,7 +91,7 @@ describe('DrawCalculatorTimelock', () => {
         it('should lock next draw id if manager', async () => {
             await drawCalculatorTimelock.setManager(wallet2.address);
 
-            await increaseTime(timelockDuration + 1);
+            await increaseTime(61);
             await drawCalculatorTimelock.connect(wallet2).lock(2, (await getBlock('latest')).timestamp + 1);
 
             const timelock = await drawCalculatorTimelock.getTimelock();
@@ -151,14 +125,14 @@ describe('DrawCalculatorTimelock', () => {
                 timestamp: (await getBlock('latest')).timestamp,
             });
 
-            await increaseTime(timelockDuration + 1);
+            await increaseTime(61);
             expect(await drawCalculatorTimelock.hasElapsed()).to.equal(true);
         });
 
         it('should return false if the timelock has not expired', async () => {
             await drawCalculatorTimelock.setTimelock({
                 drawId: 1,
-                timestamp: (await getBlock('latest')).timestamp,
+                timestamp: (await getBlock('latest')).timestamp + 100,
             });
 
             expect(await drawCalculatorTimelock.hasElapsed()).to.equal(false);

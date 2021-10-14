@@ -1,6 +1,6 @@
 {
   "name": "@pooltogether/v4-timelocks",
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0-beta.4",
   "description": "PoolTogether V4 Timelocks",
   "main": "index.js",
   "license": "MIT",
@@ -20,15 +20,15 @@
     "distribute-ether": "hardhat --network localhost fork:distribute-ether-from-binance",
     "create-prize-pool": "hardhat --network localhost fork:create-aave-prize-pool",
     "run-fork": "yarn impersonate-accounts && yarn distribute-ether && yarn create-prize-pool",
-    "test": "yarn clean && HIDE_DEPLOY_LOG=true OPTIMIZER_DISABLED=true hardhat test",
+    "test": "HIDE_DEPLOY_LOG=true OPTIMIZER_DISABLED=true hardhat test",
     "prepack": "yarn compile"
   },
   "peerDependencies": {
     "@pooltogether/owner-manager-contracts": "1.1.0",
-    "@pooltogether/v4-core": "^1.0.0-beta.2"
+    "@pooltogether/v4-core": "^1.0.0-beta.3"
   },
   "devDependencies": {
-    "@pooltogether/v4-core": "^1.0.0-beta.2",
+    "@pooltogether/v4-core": "^1.0.0-beta.3",
     "@nomiclabs/hardhat-ethers": "2.0.2",
     "@nomiclabs/hardhat-etherscan": "2.1.3",
     "@nomiclabs/hardhat-waffle": "2.0.1",
