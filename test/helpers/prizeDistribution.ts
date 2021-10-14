@@ -10,6 +10,7 @@ type PrizeDistribution = {
     startTimestampOffset: BigNumber;
     endTimestampOffset: BigNumber;
     maxPicksPerUser: BigNumber;
+    expiryDuration: BigNumber;
 };
 
 const ZERO_DISTRIBUTIONS = new Array(16).fill(0);
@@ -23,6 +24,7 @@ const prizeDistribution: PrizeDistribution = {
     startTimestampOffset: BigNumber.from(0),
     endTimestampOffset: BigNumber.from(3600),
     maxPicksPerUser: BigNumber.from(10),
+    expiryDuration: BigNumber.from(100)
 };
 
 export const newPrizeDistribution = (cardinality: number = 5): any => {

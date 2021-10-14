@@ -960,10 +960,10 @@
   resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-rng-contracts/-/pooltogether-rng-contracts-1.4.0.tgz#310b9667a1123cfcce718aa6d8eba7c434a53c75"
   integrity sha512-dNgDpDsCMxUxaz8u6OfpjSBtMOdcp8QkLC3cwJ6E++4ux0qY2ON+ZqJEHIC3q4ZVJ4Xf6FikMJF0a8SVNtl8Zw==
 
-"@pooltogether/v4-core@^1.0.0-beta.2":
-  version "1.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@pooltogether/v4-core/-/v4-core-1.0.0-beta.2.tgz#bc768bfaee67b76df90f163d994b0480fe30224a"
-  integrity sha512-JxHceaNOQa/Ln37sFNlWTChNcmk8Vuj7UAqhkPp+T2dOzWCroTxCxplzqM4ccSJyAGqdXPZrsXaWnjGixTLERA==
+"@pooltogether/v4-core@^1.0.0-beta.3":
+  version "1.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@pooltogether/v4-core/-/v4-core-1.0.0-beta.3.tgz#134bf0812a1f49920064145ca5c34c41d8182281"
+  integrity sha512-WXy1UXYr+V3SYzuXCRJxmKF0zh5y54KEw6Z+MlBuuFwCIRENr19c5tuWQjJRzjk/Vwpl0lJLn1nST3X1o9XGHw==
   dependencies:
     "@openzeppelin/contracts" "^4.3.1"
     "@pooltogether/fixed-point" "1.0.0"
