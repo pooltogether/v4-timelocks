@@ -20,7 +20,7 @@
     "distribute-ether": "hardhat --network localhost fork:distribute-ether-from-binance",
     "create-prize-pool": "hardhat --network localhost fork:create-aave-prize-pool",
     "run-fork": "yarn impersonate-accounts && yarn distribute-ether && yarn create-prize-pool",
-    "test": "HIDE_DEPLOY_LOG=true OPTIMIZER_DISABLED=true hardhat test",
+    "test": "HIDE_DEPLOY_LOG=true hardhat test",
     "prepack": "yarn compile"
   },
   "peerDependencies": {

@@ -24,7 +24,7 @@ interface IDrawAndPrizeDistributionTimelock  {
   * @notice The PrizeDistributionTimelock smart contract...
 */
 contract DrawAndPrizeDistributionTimelock is IDrawAndPrizeDistributionTimelock, Manageable {
-
+  
   /* ============ Global Variables ============ */
 
     /// @notice The DrawBuffer contract address.
@@ -36,6 +36,27 @@ contract DrawAndPrizeDistributionTimelock is IDrawAndPrizeDistributionTimelock, 
     /// @notice Timelock struct reference.
     IDrawCalculatorTimelock public timelock;
 
+  /* ============ Events ============ */
+    /// @notice Emitted when the contract is deployed.
+    event Deployed(
+        IDrawBuffer indexed drawBuffer,
+        IPrizeDistributionFactory indexed prizeDistributionFactory,
+        IDrawCalculatorTimelock indexed timelock
+    );
+
+    /**
+     * @notice Emitted when Draw and PrizeDistribution are pushed to external contracts.
+     * @param drawId Draw ID
+     * @param draw Draw
+     * @param totalNetworkTicketSupply totalNetworkTicketSupply
+     */
+    event DrawAndPrizeDistributionPushed(
+      uint32 indexed drawId, 
+      IDrawBeacon.Draw draw, 
+      uint256 totalNetworkTicketSupply
+    );
+
+
   /* ============ Constructor ============ */
 
     /**
@@ -46,15 +67,19 @@ contract DrawAndPrizeDistributionTimelock is IDrawAndPrizeDistributionTimelock, 
       address _owner,
       IDrawBuffer _drawBuffer,
       IPrizeDistributionFactory _prizeDistributionFactory,
-      IDrawCalculatorTimelock _timelock) Ownable(_owner) {
-        drawBuffer = _drawBuffer;
-        prizeDistributionFactory = _prizeDistributionFactory;
-        timelock = _timelock;
-      }
+      IDrawCalculatorTimelock _timelock) Ownable(_owner) 
+    {
+      drawBuffer = _drawBuffer;
+      prizeDistributionFactory = _prizeDistributionFactory;
+      timelock = _timelock;
+
+      emit Deployed(_drawBuffer, _prizeDistributionFactory, _timelock);
+    }
 
   function push(IDrawBeacon.Draw memory _draw, uint256 _totalNetworkTicketSupply) external override onlyManagerOrOwner {
       timelock.lock(_draw.drawId, _draw.timestamp + _draw.beaconPeriodSeconds);
       drawBuffer.pushDraw(_draw);
       prizeDistributionFactory.pushPrizeDistribution(_draw.drawId, _totalNetworkTicketSupply);
+      emit DrawAndPrizeDistributionPushed(_draw.drawId, _draw, _totalNetworkTicketSupply);
   }
 }
