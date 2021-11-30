@@ -10,7 +10,7 @@ interface IPrizeDistributionFactory {
 }
 
 /**
-  * @title  PoolTogether V4 IPrizeDistributionTimelock
+  * @title  PoolTogether V4 IPrizeDistributionTimelock 
   * @author PoolTogether Inc Team
   * @notice The IPrizeDistributionTimelock smart contract interface...
 */
