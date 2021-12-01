@@ -14,7 +14,7 @@ interface IPrizeDistributionFactory {
   * @author PoolTogether Inc Team
   * @notice The IPrizeDistributionTimelock smart contract interface...
 */
-interface IDrawAndPrizeDistributionTimelock  {
+interface IReceiverDrawAndPrizeDistributionTimelock  {
   function push(IDrawBeacon.Draw memory draw, uint256 totalNetworkTicketSupply) external;
 }
 
@@ -23,7 +23,7 @@ interface IDrawAndPrizeDistributionTimelock  {
   * @author PoolTogether Inc Team
   * @notice The PrizeDistributionTimelock smart contract...
 */
-contract DrawAndPrizeDistributionTimelock is IDrawAndPrizeDistributionTimelock, Manageable {
+contract ReceiverDrawAndPrizeDistributionTimelock is IReceiverDrawAndPrizeDistributionTimelock, Manageable {
   
   /* ============ Global Variables ============ */
 
@@ -60,7 +60,7 @@ contract DrawAndPrizeDistributionTimelock is IDrawAndPrizeDistributionTimelock, 
   /* ============ Constructor ============ */
 
     /**
-     * @notice Initialize DrawAndPrizeDistributionTimelock smart contract.
+     * @notice Initialize ReceiverDrawAndPrizeDistributionTimelock smart contract.
      * @param _owner The smart contract owner
      */
     constructor(
