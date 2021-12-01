@@ -3,25 +3,16 @@ pragma solidity 0.8.6;
 import "@pooltogether/v4-core/contracts/interfaces/IDrawBeacon.sol";
 import "@pooltogether/v4-core/contracts/interfaces/IDrawBuffer.sol";
 import "@pooltogether/owner-manager-contracts/contracts/Manageable.sol";
+import "./interfaces/IReceiverDrawAndPrizeDistributionTimelock.sol";
+import "./interfaces/IPrizeDistributionFactory.sol";
 import "./interfaces/IDrawCalculatorTimelock.sol";
 
-interface IPrizeDistributionFactory {
-  function pushPrizeDistribution(uint32 _drawId, uint256 _totalNetworkTicketSupply) external;
-}
-
 /**
-  * @title  PoolTogether V4 IPrizeDistributionTimelock 
+  * @title  PoolTogether V4 ReceiverDrawAndPrizeDistributionTimelock
   * @author PoolTogether Inc Team
-  * @notice The IPrizeDistributionTimelock smart contract interface...
-*/
-interface IReceiverDrawAndPrizeDistributionTimelock  {
-  function push(IDrawBeacon.Draw memory draw, uint256 totalNetworkTicketSupply) external;
-}
-
-/**
-  * @title  PoolTogether V4 PrizeDistributionTimelock
-  * @author PoolTogether Inc Team
-  * @notice The PrizeDistributionTimelock smart contract...
+  * @notice The ReceiverDrawAndPrizeDistributionTimelock smart contract is an upgrade of the L2TimelockTimelock smart contract.
+            Reducing protocol risk by eliminating off-chain computation of PrizeDistribution parameters. The timelock will
+            only pass the total supply of all tickets in a "PrizePool Network".
 */
 contract ReceiverDrawAndPrizeDistributionTimelock is IReceiverDrawAndPrizeDistributionTimelock, Manageable {
   
@@ -34,7 +25,7 @@ contract ReceiverDrawAndPrizeDistributionTimelock is IReceiverDrawAndPrizeDistri
     IPrizeDistributionFactory public immutable prizeDistributionFactory;
 
     /// @notice Timelock struct reference.
-    IDrawCalculatorTimelock public timelock;
+    IDrawCalculatorTimelock public immutable timelock;
 
   /* ============ Events ============ */
     /// @notice Emitted when the contract is deployed.
