@@ -12,7 +12,7 @@ import "./interfaces/IDrawCalculatorTimelock.sol";
   * @author PoolTogether Inc Team
   * @notice The ReceiverDrawAndPrizeDistributionTimelock smart contract is an upgrade of the L2TimelockTimelock smart contract.
             Reducing protocol risk by eliminating off-chain computation of PrizeDistribution parameters. The timelock will
-            only pass the total supply of all tickets in a "PrizePool Network".
+            only pass the total supply of all tickets in a "PrizePool Network" to the prize distribution factory contract.
 */
 contract ReceiverDrawAndPrizeDistributionTimelock is IReceiverDrawAndPrizeDistributionTimelock, Manageable {
   
@@ -27,32 +27,14 @@ contract ReceiverDrawAndPrizeDistributionTimelock is IReceiverDrawAndPrizeDistri
     /// @notice Timelock struct reference.
     IDrawCalculatorTimelock public immutable timelock;
 
-  /* ============ Events ============ */
-    /// @notice Emitted when the contract is deployed.
-    event Deployed(
-        IDrawBuffer indexed drawBuffer,
-        IPrizeDistributionFactory indexed prizeDistributionFactory,
-        IDrawCalculatorTimelock indexed timelock
-    );
-
-    /**
-     * @notice Emitted when Draw and PrizeDistribution are pushed to external contracts.
-     * @param drawId Draw ID
-     * @param draw Draw
-     * @param totalNetworkTicketSupply totalNetworkTicketSupply
-     */
-    event DrawAndPrizeDistributionPushed(
-      uint32 indexed drawId, 
-      IDrawBeacon.Draw draw, 
-      uint256 totalNetworkTicketSupply
-    );
-
-
   /* ============ Constructor ============ */
 
     /**
      * @notice Initialize ReceiverDrawAndPrizeDistributionTimelock smart contract.
      * @param _owner The smart contract owner
+     * @param _drawBuffer DrawBuffer address
+     * @param _prizeDistributionFactory PrizeDistributionFactory address
+     * @param _timelock DrawCalculatorTimelock address
      */
     constructor(
       address _owner,
@@ -63,10 +45,10 @@ contract ReceiverDrawAndPrizeDistributionTimelock is IReceiverDrawAndPrizeDistri
       drawBuffer = _drawBuffer;
       prizeDistributionFactory = _prizeDistributionFactory;
       timelock = _timelock;
-
       emit Deployed(_drawBuffer, _prizeDistributionFactory, _timelock);
     }
 
+  /// @inheritdoc IReceiverDrawAndPrizeDistributionTimelock
   function push(IDrawBeacon.Draw memory _draw, uint256 _totalNetworkTicketSupply) external override onlyManagerOrOwner {
       timelock.lock(_draw.drawId, _draw.timestamp + _draw.beaconPeriodSeconds);
       drawBuffer.pushDraw(_draw);
