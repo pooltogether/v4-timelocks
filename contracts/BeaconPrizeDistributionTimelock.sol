@@ -10,63 +10,40 @@ import "./interfaces/IDrawCalculatorTimelock.sol";
 /**
   * @title  PoolTogether V4 BeaconPrizeDistributionTimelock
   * @author PoolTogether Inc Team
-  * @notice The BeaconPrizeDistributionTimelock smart contract is an upgrade of the L2TimelockTimelock smart contract.
+  * @notice The BeaconPrizeDistributionTimelock smart contract is an upgrade of the L1TimelockTimelock smart contract.
             Reducing protocol risk by eliminating off-chain computation of PrizeDistribution parameters. The timelock will
-            only pass the total supply of all tickets in a "PrizePool Network".
+            only pass the total supply of all tickets in a "PrizePool Network" to the prize distribution factory contract.
 */
 contract BeaconPrizeDistributionTimelock is IBeaconPrizeDistributionTimelock, Manageable {
   
   /* ============ Global Variables ============ */
 
-    /// @notice The DrawBuffer contract address.
-    IDrawBuffer public immutable drawBuffer;
+  /// @notice PrizeDistributionFactory reference.
+  IPrizeDistributionFactory public immutable prizeDistributionFactory;
 
-    /// @notice Internal PrizeDistributionFactory reference.
-    IPrizeDistributionFactory public immutable prizeDistributionFactory;
-
-    /// @notice Timelock struct reference.
-    IDrawCalculatorTimelock public immutable timelock;
-
-  /* ============ Events ============ */
-    /// @notice Emitted when the contract is deployed.
-    event Deployed(
-        IDrawBuffer indexed drawBuffer,
-        IPrizeDistributionFactory indexed prizeDistributionFactory,
-        IDrawCalculatorTimelock indexed timelock
-    );
-
-    /**
-     * @notice Emitted when Draw and PrizeDistribution are pushed to external contracts.
-     * @param drawId Draw ID
-     * @param draw Draw
-     * @param totalNetworkTicketSupply totalNetworkTicketSupply
-     */
-    event DrawAndPrizeDistributionPushed(
-      uint32 indexed drawId, 
-      IDrawBeacon.Draw draw, 
-      uint256 totalNetworkTicketSupply
-    );
-
+  /// @notice DrawCalculatorTimelock reference.
+  IDrawCalculatorTimelock public immutable timelock;
 
   /* ============ Constructor ============ */
 
     /**
      * @notice Initialize BeaconPrizeDistributionTimelock smart contract.
      * @param _owner The smart contract owner
+     * @param _prizeDistributionFactory PrizeDistributionFactory address
+     * @param _timelock DrawCalculatorTimelock address
      */
     constructor(
       address _owner,
-      IDrawBuffer _drawBuffer,
       IPrizeDistributionFactory _prizeDistributionFactory,
       IDrawCalculatorTimelock _timelock) Ownable(_owner) 
     {
-      drawBuffer = _drawBuffer;
       prizeDistributionFactory = _prizeDistributionFactory;
       timelock = _timelock;
 
       emit Deployed(_drawBuffer, _prizeDistributionFactory, _timelock);
     }
 
+  /// @inheritdoc BeaconPrizeDistributionTimelock
   function push(IDrawBeacon.Draw memory _draw, uint256 _totalNetworkTicketSupply) external override onlyManagerOrOwner {
       timelock.lock(_draw.drawId, _draw.timestamp + _draw.beaconPeriodSeconds);
       prizeDistributionFactory.pushPrizeDistribution(_draw.drawId, _totalNetworkTicketSupply);
