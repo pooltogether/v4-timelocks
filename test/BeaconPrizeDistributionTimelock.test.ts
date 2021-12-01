@@ -7,32 +7,20 @@ const { getSigners } = ethers;
 describe('BeaconPrizeDistributionTimelock', () => {
   let wallet1: any;
   let wallet2: any;
-
   let drawAndPrizeDistributionTimelock: Contract;
-
   let prizeDistributionFactory: MockContract;
   let drawCalculatorTimelock: MockContract;
-  let drawBuffer: MockContract;
-
   let beaconPrizeDistributionTimelockFactory: ContractFactory;
 
   beforeEach(async () => {
     [wallet1, wallet2] = await getSigners();
-
     const PrizeDistributionFactory = await artifacts.readArtifact('IPrizeDistributionFactory');
     prizeDistributionFactory = await deployMockContract(wallet1, PrizeDistributionFactory.abi);
-
-    const DrawBufferArtifact = await artifacts.readArtifact('IDrawBuffer');
-    drawBuffer = await deployMockContract(wallet1, DrawBufferArtifact.abi);
-
     const DrawCalculatorTimelock = await artifacts.readArtifact('DrawCalculatorTimelock');
     drawCalculatorTimelock = await deployMockContract(wallet1, DrawCalculatorTimelock.abi);
-
     beaconPrizeDistributionTimelockFactory = await ethers.getContractFactory('BeaconPrizeDistributionTimelock');
-
     drawAndPrizeDistributionTimelock = await beaconPrizeDistributionTimelockFactory.deploy(
       wallet1.address,
-      drawBuffer.address,
       prizeDistributionFactory.address,
       drawCalculatorTimelock.address,
     );
@@ -43,13 +31,9 @@ describe('BeaconPrizeDistributionTimelock', () => {
       await expect(drawAndPrizeDistributionTimelock.deployTransaction)
         .to.emit(drawAndPrizeDistributionTimelock, 'Deployed')
         .withArgs(
-          drawBuffer.address,
           prizeDistributionFactory.address,
           drawCalculatorTimelock.address,
         );
-
-      expect(await drawAndPrizeDistributionTimelock.drawBuffer()).to.equal(drawBuffer.address);
-
       expect(await drawAndPrizeDistributionTimelock.prizeDistributionFactory()).to.equal(
         prizeDistributionFactory.address,
       );
@@ -67,7 +51,6 @@ describe('BeaconPrizeDistributionTimelock', () => {
     };
 
     it('should allow a push when no push has happened', async () => {
-      await drawBuffer.mock.pushDraw.returns(draw.drawId);
       await prizeDistributionFactory.mock.pushPrizeDistribution.returns();
       await drawCalculatorTimelock.mock.lock.returns(true);
       await expect(drawAndPrizeDistributionTimelock.push(draw, BigNumber.from(1000000)))
@@ -83,10 +66,7 @@ describe('BeaconPrizeDistributionTimelock', () => {
     it('should not allow a push if a draw is still timelocked', async () => {
       await drawCalculatorTimelock.mock.lock
         .revertsWithReason('OM/timelock-not-expired');
-
-      await drawBuffer.mock.pushDraw.returns(draw.drawId);
       await prizeDistributionFactory.mock.pushPrizeDistribution.returns();
-
       await expect(drawAndPrizeDistributionTimelock.push(draw, BigNumber.from(1000000))).to.be.revertedWith(
         'OM/timelock-not-expired',
       );
