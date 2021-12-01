@@ -14,10 +14,7 @@ import "./interfaces/IDrawCalculatorTimelock.sol";
             Reducing protocol risk by eliminating off-chain computation of PrizeDistribution parameters. The timelock will
             only pass the total supply of all tickets in a "PrizePool Network" to the prize distribution factory contract.
 */
-contract ReceiverTimelockAndPushRouter is
-    IReceiverTimelockAndPushRouter,
-    Manageable
-{
+contract ReceiverTimelockAndPushRouter is IReceiverTimelockAndPushRouter, Manageable {
     /* ============ Global Variables ============ */
 
     /// @notice The DrawBuffer contract address.
@@ -59,6 +56,10 @@ contract ReceiverTimelockAndPushRouter is
         timelock.lock(_draw.drawId, _draw.timestamp + _draw.beaconPeriodSeconds);
         drawBuffer.pushDraw(_draw);
         prizeDistributionFactory.pushPrizeDistribution(_draw.drawId, _totalNetworkTicketSupply);
-        emit DrawLockedPushedAndTotalNetworkTicketSupplyPushed(_draw.drawId, _draw, _totalNetworkTicketSupply);
+        emit DrawLockedPushedAndTotalNetworkTicketSupplyPushed(
+            _draw.drawId,
+            _draw,
+            _totalNetworkTicketSupply
+        );
     }
 }

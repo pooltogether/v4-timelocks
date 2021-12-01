@@ -56,7 +56,10 @@ describe('BeaconTimelockAndPushRouter', () => {
             await drawCalculatorTimelock.mock.lock.returns(true);
             await expect(
                 drawAndPrizeDistributionTimelock.push(draw, BigNumber.from(1000000)),
-            ).to.emit(drawAndPrizeDistributionTimelock, 'DrawLockedAndTotalNetworkTicketSupplyPushed');
+            ).to.emit(
+                drawAndPrizeDistributionTimelock,
+                'DrawLockedAndTotalNetworkTicketSupplyPushed',
+            );
         });
 
         it('should not allow a push from a non-owner', async () => {

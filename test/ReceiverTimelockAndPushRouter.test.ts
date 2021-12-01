@@ -78,7 +78,10 @@ describe('ReceiverTimelockAndPushRouter', () => {
             await drawCalculatorTimelock.mock.lock.returns(true);
             await expect(
                 drawAndPrizeDistributionTimelock.push(draw, BigNumber.from(1000000)),
-            ).to.emit(drawAndPrizeDistributionTimelock, 'DrawLockedPushedAndTotalNetworkTicketSupplyPushed');
+            ).to.emit(
+                drawAndPrizeDistributionTimelock,
+                'DrawLockedPushedAndTotalNetworkTicketSupplyPushed',
+            );
         });
 
         it('should not allow a push from a non-owner', async () => {

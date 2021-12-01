@@ -49,6 +49,10 @@ contract BeaconTimelockAndPushRouter is IBeaconTimelockAndPushRouter, Manageable
     {
         timelock.lock(_draw.drawId, _draw.timestamp + _draw.beaconPeriodSeconds);
         prizeDistributionFactory.pushPrizeDistribution(_draw.drawId, _totalNetworkTicketSupply);
-        emit DrawLockedAndTotalNetworkTicketSupplyPushed(_draw.drawId, _draw, _totalNetworkTicketSupply);
+        emit DrawLockedAndTotalNetworkTicketSupplyPushed(
+            _draw.drawId,
+            _draw,
+            _totalNetworkTicketSupply
+        );
     }
 }

@@ -10,7 +10,6 @@ import "./IDrawCalculatorTimelock.sol";
  * @notice The IBeaconTimelockAndPushRouter smart contract interface...
  */
 interface IBeaconTimelockAndPushRouter {
-    
     /// @notice Emitted when the contract is deployed.
     event Deployed(
         IPrizeDistributionFactory indexed prizeDistributionFactory,
