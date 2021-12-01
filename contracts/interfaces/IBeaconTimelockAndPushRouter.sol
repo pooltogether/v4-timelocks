@@ -1,37 +1,36 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.6;
 import "@pooltogether/v4-core/contracts/interfaces/IDrawBeacon.sol";
-import "@pooltogether/v4-core/contracts/interfaces/IDrawBuffer.sol";
 import "./IPrizeDistributionFactory.sol";
 import "./IDrawCalculatorTimelock.sol";
 
 /**
- * @title  PoolTogether V4 IPrizeDistributionTimelock
+ * @title  PoolTogether V4 IBeaconTimelockAndPushRouter
  * @author PoolTogether Inc Team
- * @notice The IPrizeDistributionTimelock smart contract interface...
+ * @notice The IBeaconTimelockAndPushRouter smart contract interface...
  */
-interface IReceiverDrawAndPrizeDistributionTimelock {
+interface IBeaconTimelockAndPushRouter {
+    
     /// @notice Emitted when the contract is deployed.
     event Deployed(
-        IDrawBuffer indexed drawBuffer,
         IPrizeDistributionFactory indexed prizeDistributionFactory,
         IDrawCalculatorTimelock indexed timelock
     );
 
     /**
-     * @notice Emitted when Draw and PrizeDistribution are pushed to external contracts.
+     * @notice Emitted when Draw is locked and totalNetworkTicketSupply is pushed to PrizeDistributionFactory
      * @param drawId Draw ID
      * @param draw Draw
      * @param totalNetworkTicketSupply totalNetworkTicketSupply
      */
-    event DrawAndPrizeDistributionPushed(
+    event DrawLockedAndTotalNetworkTicketSupplyPushed(
         uint32 indexed drawId,
         IDrawBeacon.Draw draw,
         uint256 totalNetworkTicketSupply
     );
 
     /**
-     * @notice Locks next Draw, pushes Draw to DraWBuffer and pushes totalNetworkTicketSupply to PrizeDistributionFactory.
+     * @notice Locks next Draw and pushes totalNetworkTicketSupply to PrizeDistributionFactory
      * @dev    Restricts new draws for N seconds by forcing timelock on the next target draw id.
      * @param draw Draw
      * @param totalNetworkTicketSupply totalNetworkTicketSupply
