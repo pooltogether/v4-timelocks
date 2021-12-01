@@ -40,10 +40,10 @@ contract BeaconPrizeDistributionTimelock is IBeaconPrizeDistributionTimelock, Ma
       prizeDistributionFactory = _prizeDistributionFactory;
       timelock = _timelock;
 
-      emit Deployed(_drawBuffer, _prizeDistributionFactory, _timelock);
+      emit Deployed(_prizeDistributionFactory, _timelock);
     }
 
-  /// @inheritdoc BeaconPrizeDistributionTimelock
+  /// @inheritdoc IBeaconPrizeDistributionTimelock
   function push(IDrawBeacon.Draw memory _draw, uint256 _totalNetworkTicketSupply) external override onlyManagerOrOwner {
       timelock.lock(_draw.drawId, _draw.timestamp + _draw.beaconPeriodSeconds);
       prizeDistributionFactory.pushPrizeDistribution(_draw.drawId, _totalNetworkTicketSupply);

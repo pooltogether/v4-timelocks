@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.6;
 import "@pooltogether/v4-core/contracts/interfaces/IDrawBeacon.sol";
-
+import "./IPrizeDistributionFactory.sol";
+import "./IDrawCalculatorTimelock.sol";
 /**
   * @title  PoolTogether V4 IBeaconPrizeDistributionTimelock 
   * @author PoolTogether Inc Team
