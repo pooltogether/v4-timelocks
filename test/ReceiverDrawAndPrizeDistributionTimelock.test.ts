@@ -2,12 +2,9 @@ import { expect } from 'chai';
 import { deployMockContract, MockContract } from 'ethereum-waffle';
 import { ethers, artifacts } from 'hardhat';
 import { BigNumber, Contract, ContractFactory } from 'ethers';
-
-import { newPrizeDistribution } from './helpers/prizeDistribution';
-
 const { getSigners } = ethers;
 
-describe('DrawAndPrizeDistributionTimelock', () => {
+describe('ReceiverDrawAndPrizeDistributionTimelock', () => {
   let wallet1: any;
   let wallet2: any;
 
@@ -31,7 +28,7 @@ describe('DrawAndPrizeDistributionTimelock', () => {
     const DrawCalculatorTimelock = await artifacts.readArtifact('DrawCalculatorTimelock');
     drawCalculatorTimelock = await deployMockContract(wallet1, DrawCalculatorTimelock.abi);
 
-    drawAndPrizeDistributionTimelockFactory = await ethers.getContractFactory('DrawAndPrizeDistributionTimelock');
+    drawAndPrizeDistributionTimelockFactory = await ethers.getContractFactory('ReceiverDrawAndPrizeDistributionTimelock');
 
     drawAndPrizeDistributionTimelock = await drawAndPrizeDistributionTimelockFactory.deploy(
       wallet1.address,
