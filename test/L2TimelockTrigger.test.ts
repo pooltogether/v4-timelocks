@@ -73,8 +73,10 @@ describe('L2TimelockTrigger', () => {
             await drawBuffer.mock.pushDraw.returns(draw.drawId);
             await prizeDistributionBuffer.mock.pushPrizeDistribution.returns(true);
             await drawCalculatorTimelock.mock.lock.returns(true);
-            await expect(l2TimelockTrigger.push(draw, newPrizeDistribution()))
-                .to.emit(l2TimelockTrigger, 'DrawAndPrizeDistributionPushed');
+            await expect(l2TimelockTrigger.push(draw, newPrizeDistribution())).to.emit(
+                l2TimelockTrigger,
+                'DrawAndPrizeDistributionPushed',
+            );
         });
 
         it('should not allow a push from a non-owner', async () => {
@@ -84,8 +86,7 @@ describe('L2TimelockTrigger', () => {
         });
 
         it('should not allow a push if a draw is still timelocked', async () => {
-            await drawCalculatorTimelock.mock.lock
-                .revertsWithReason('OM/timelock-not-expired');
+            await drawCalculatorTimelock.mock.lock.revertsWithReason('OM/timelock-not-expired');
 
             await drawBuffer.mock.pushDraw.returns(draw.drawId);
             await prizeDistributionBuffer.mock.pushPrizeDistribution.returns(true);

@@ -15,16 +15,15 @@ import "./interfaces/IDrawCalculatorTimelock.sol";
             only pass the total supply of all tickets in a "PrizePool Network" to the prize distribution factory contract.
 */
 contract BeaconPrizeDistributionTimelock is IBeaconPrizeDistributionTimelock, Manageable {
-  
-  /* ============ Global Variables ============ */
+    /* ============ Global Variables ============ */
 
-  /// @notice PrizeDistributionFactory reference.
-  IPrizeDistributionFactory public immutable prizeDistributionFactory;
+    /// @notice PrizeDistributionFactory reference.
+    IPrizeDistributionFactory public immutable prizeDistributionFactory;
 
-  /// @notice DrawCalculatorTimelock reference.
-  IDrawCalculatorTimelock public immutable timelock;
+    /// @notice DrawCalculatorTimelock reference.
+    IDrawCalculatorTimelock public immutable timelock;
 
-  /* ============ Constructor ============ */
+    /* ============ Constructor ============ */
 
     /**
      * @notice Initialize BeaconPrizeDistributionTimelock smart contract.
@@ -33,20 +32,24 @@ contract BeaconPrizeDistributionTimelock is IBeaconPrizeDistributionTimelock, Ma
      * @param _timelock DrawCalculatorTimelock address
      */
     constructor(
-      address _owner,
-      IPrizeDistributionFactory _prizeDistributionFactory,
-      IDrawCalculatorTimelock _timelock) Ownable(_owner) 
-    {
-      prizeDistributionFactory = _prizeDistributionFactory;
-      timelock = _timelock;
+        address _owner,
+        IPrizeDistributionFactory _prizeDistributionFactory,
+        IDrawCalculatorTimelock _timelock
+    ) Ownable(_owner) {
+        prizeDistributionFactory = _prizeDistributionFactory;
+        timelock = _timelock;
 
-      emit Deployed(_prizeDistributionFactory, _timelock);
+        emit Deployed(_prizeDistributionFactory, _timelock);
     }
 
-  /// @inheritdoc IBeaconPrizeDistributionTimelock
-  function push(IDrawBeacon.Draw memory _draw, uint256 _totalNetworkTicketSupply) external override onlyManagerOrOwner {
-      timelock.lock(_draw.drawId, _draw.timestamp + _draw.beaconPeriodSeconds);
-      prizeDistributionFactory.pushPrizeDistribution(_draw.drawId, _totalNetworkTicketSupply);
-      emit DrawAndPrizeDistributionPushed(_draw.drawId, _draw, _totalNetworkTicketSupply);
-  }
+    /// @inheritdoc IBeaconPrizeDistributionTimelock
+    function push(IDrawBeacon.Draw memory _draw, uint256 _totalNetworkTicketSupply)
+        external
+        override
+        onlyManagerOrOwner
+    {
+        timelock.lock(_draw.drawId, _draw.timestamp + _draw.beaconPeriodSeconds);
+        prizeDistributionFactory.pushPrizeDistribution(_draw.drawId, _totalNetworkTicketSupply);
+        emit DrawAndPrizeDistributionPushed(_draw.drawId, _draw, _totalNetworkTicketSupply);
+    }
 }

@@ -29,8 +29,10 @@ contract L1TimelockTrigger is Manageable {
      * @param drawId    Draw ID
      * @param prizeDistribution PrizeDistribution
      */
-    event PrizeDistributionPushed(uint32 indexed drawId, IPrizeDistributionBuffer.PrizeDistribution prizeDistribution);
-
+    event PrizeDistributionPushed(
+        uint32 indexed drawId,
+        IPrizeDistributionBuffer.PrizeDistribution prizeDistribution
+    );
 
     /* ============ Global Variables ============ */
 
@@ -65,10 +67,10 @@ contract L1TimelockTrigger is Manageable {
      * @param _draw Draw struct
      * @param _prizeDistribution PrizeDistribution struct
      */
-    function push(IDrawBeacon.Draw calldata _draw, IPrizeDistributionBuffer.PrizeDistribution memory _prizeDistribution)
-        external
-        onlyManagerOrOwner
-    {   
+    function push(
+        IDrawBeacon.Draw calldata _draw,
+        IPrizeDistributionBuffer.PrizeDistribution memory _prizeDistribution
+    ) external onlyManagerOrOwner {
         // Locks the new PrizeDistribution according to the Draw endtime.
         timelock.lock(_draw.drawId, _draw.timestamp + _draw.beaconPeriodSeconds);
         prizeDistributionBuffer.pushPrizeDistribution(_draw.drawId, _prizeDistribution);

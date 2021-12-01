@@ -39,10 +39,7 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
      * @param _owner                       Address of the DrawCalculator owner.
      * @param _calculator                 DrawCalculator address.
      */
-    constructor(
-        address _owner,
-        IDrawCalculator _calculator
-    ) Ownable(_owner) {
+    constructor(address _owner, IDrawCalculator _calculator) Ownable(_owner) {
         calculator = _calculator;
 
         emit Deployed(_calculator);
@@ -69,7 +66,12 @@ contract DrawCalculatorTimelock is IDrawCalculatorTimelock, Manageable {
     }
 
     /// @inheritdoc IDrawCalculatorTimelock
-    function lock(uint32 _drawId, uint64 _timestamp) external override onlyManagerOrOwner returns (bool) {
+    function lock(uint32 _drawId, uint64 _timestamp)
+        external
+        override
+        onlyManagerOrOwner
+        returns (bool)
+    {
         Timelock memory _timelock = timelock;
         require(_drawId == _timelock.drawId + 1, "OM/not-drawid-plus-one");
 
