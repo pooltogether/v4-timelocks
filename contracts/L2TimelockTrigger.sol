@@ -16,7 +16,6 @@ import "./interfaces/IDrawCalculatorTimelock.sol";
             malicously set Draw in the unfortunate event an Owner is compromised.
 */
 contract L2TimelockTrigger is Manageable {
-    
     /// @notice Emitted when the contract is deployed.
     event Deployed(
         IDrawBuffer indexed drawBuffer,
@@ -29,7 +28,11 @@ contract L2TimelockTrigger is Manageable {
      * @param drawId            Draw ID
      * @param prizeDistribution PrizeDistribution
      */
-    event DrawAndPrizeDistributionPushed(uint32 indexed drawId, IDrawBeacon.Draw draw, IPrizeDistributionBuffer.PrizeDistribution prizeDistribution);
+    event DrawAndPrizeDistributionPushed(
+        uint32 indexed drawId,
+        IDrawBeacon.Draw draw,
+        IPrizeDistributionBuffer.PrizeDistribution prizeDistribution
+    );
 
     /* ============ Global Variables ============ */
 
@@ -72,10 +75,10 @@ contract L2TimelockTrigger is Manageable {
      * @param _draw              Draw struct from IDrawBeacon
      * @param _prizeDistribution PrizeDistribution struct from IPrizeDistributionBuffer
      */
-    function push(IDrawBeacon.Draw memory _draw, IPrizeDistributionBuffer.PrizeDistribution memory _prizeDistribution)
-        external
-        onlyManagerOrOwner
-    {
+    function push(
+        IDrawBeacon.Draw memory _draw,
+        IPrizeDistributionBuffer.PrizeDistribution memory _prizeDistribution
+    ) external onlyManagerOrOwner {
         timelock.lock(_draw.drawId, _draw.timestamp + _draw.beaconPeriodSeconds);
         drawBuffer.pushDraw(_draw);
         prizeDistributionBuffer.pushPrizeDistribution(_draw.drawId, _prizeDistribution);

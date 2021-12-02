@@ -30,7 +30,7 @@ describe('DrawCalculatorTimelock', () => {
 
         drawCalculatorTimelock = await drawCalculatorTimelockFactory.deploy(
             wallet1.address,
-            drawCalculator.address
+            drawCalculator.address,
         );
     });
 
@@ -78,8 +78,9 @@ describe('DrawCalculatorTimelock', () => {
             await increaseTime(61);
 
             // Locks Draw ID 2 and set the unlock timestamp to occur in 100 seconds.
-            await expect(drawCalculatorTimelock.lock(2, (await getBlock('latest')).timestamp + 100))
-                .to.emit(drawCalculatorTimelock, 'LockedDraw')
+            await expect(
+                drawCalculatorTimelock.lock(2, (await getBlock('latest')).timestamp + 100),
+            ).to.emit(drawCalculatorTimelock, 'LockedDraw');
 
             const timelock = await drawCalculatorTimelock.getTimelock();
             const currentTimestamp = (await getBlock('latest')).timestamp;
@@ -92,7 +93,9 @@ describe('DrawCalculatorTimelock', () => {
             await drawCalculatorTimelock.setManager(wallet2.address);
 
             await increaseTime(61);
-            await drawCalculatorTimelock.connect(wallet2).lock(2, (await getBlock('latest')).timestamp + 1);
+            await drawCalculatorTimelock
+                .connect(wallet2)
+                .lock(2, (await getBlock('latest')).timestamp + 1);
 
             const timelock = await drawCalculatorTimelock.getTimelock();
             const currentTimestamp = (await getBlock('latest')).timestamp;
@@ -102,15 +105,17 @@ describe('DrawCalculatorTimelock', () => {
         });
 
         it('should fail if not called by the owner or manager', async () => {
-            await expect(drawCalculatorTimelock.connect(wallet2).lock(1, (await getBlock('latest')).timestamp)).to.be.revertedWith(
-                'Manageable/caller-not-manager-or-owner',
-            );
+            await expect(
+                drawCalculatorTimelock
+                    .connect(wallet2)
+                    .lock(1, (await getBlock('latest')).timestamp),
+            ).to.be.revertedWith('Manageable/caller-not-manager-or-owner');
         });
 
         it('should fail to lock if trying to lock current or previous draw id', async () => {
-            await expect(drawCalculatorTimelock.lock(1, (await getBlock('latest')).timestamp)).to.be.revertedWith(
-                'OM/not-drawid-plus-one',
-            );
+            await expect(
+                drawCalculatorTimelock.lock(1, (await getBlock('latest')).timestamp),
+            ).to.be.revertedWith('OM/not-drawid-plus-one');
         });
     });
 
@@ -141,7 +146,9 @@ describe('DrawCalculatorTimelock', () => {
 
     describe('calculate()', () => {
         it('should do nothing if no timelock is set', async () => {
-            await drawCalculator.mock.calculate.withArgs(wallet1.address, [0], '0x').returns([43], '0x');
+            await drawCalculator.mock.calculate
+                .withArgs(wallet1.address, [0], '0x')
+                .returns([43], '0x');
             const result = await drawCalculatorTimelock.calculate(wallet1.address, [0], '0x');
             expect(result[0][0]).to.equal('43');
         });

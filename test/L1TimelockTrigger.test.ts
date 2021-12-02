@@ -60,12 +60,16 @@ describe('L1TimelockTrigger', () => {
                 winningRandomNumber: 333,
                 beaconPeriodStartedAt: 4444,
                 beaconPeriodSeconds: 55555,
-            }
+            };
 
             await prizeDistributionBuffer.mock.pushPrizeDistribution.returns(0);
-            await drawCalculatorTimelock.mock.lock.withArgs(draw.drawId, draw.timestamp + draw.beaconPeriodSeconds).returns(true);
-            expect(l1TimelockTrigger.push(draw, newPrizeDistribution()))
-                .to.emit(l1TimelockTrigger, 'PrizeDistributionPushed');
+            await drawCalculatorTimelock.mock.lock
+                .withArgs(draw.drawId, draw.timestamp + draw.beaconPeriodSeconds)
+                .returns(true);
+            expect(l1TimelockTrigger.push(draw, newPrizeDistribution())).to.emit(
+                l1TimelockTrigger,
+                'PrizeDistributionPushed',
+            );
         });
 
         it('should not allow a push from a non-owner', async () => {
@@ -75,7 +79,7 @@ describe('L1TimelockTrigger', () => {
                 winningRandomNumber: 333,
                 beaconPeriodStartedAt: 4444,
                 beaconPeriodSeconds: 55555,
-            }
+            };
             await expect(
                 l1TimelockTrigger.connect(wallet2).push(draw, newPrizeDistribution()),
             ).to.be.revertedWith('Manageable/caller-not-manager-or-owner');
@@ -88,7 +92,7 @@ describe('L1TimelockTrigger', () => {
                 winningRandomNumber: 333,
                 beaconPeriodStartedAt: 4444,
                 beaconPeriodSeconds: 55555,
-            }
+            };
 
             await drawCalculatorTimelock.mock.lock
                 .withArgs(draw.drawId, draw.timestamp + draw.beaconPeriodSeconds)
