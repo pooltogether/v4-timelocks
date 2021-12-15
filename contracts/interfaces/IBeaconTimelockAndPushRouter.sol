@@ -5,11 +5,11 @@ import "./IPrizeDistributionFactory.sol";
 import "./IDrawCalculatorTimelock.sol";
 
 /**
- * @title  PoolTogether V4 IBeaconTimelockAndPushRouter
+ * @title  PoolTogether V4 IBeaconTimelockTrigger
  * @author PoolTogether Inc Team
- * @notice The IBeaconTimelockAndPushRouter smart contract interface...
+ * @notice The IBeaconTimelockTrigger smart contract interface...
  */
-interface IBeaconTimelockAndPushRouter {
+interface IBeaconTimelockTrigger {
     /// @notice Emitted when the contract is deployed.
     event Deployed(
         IPrizeDistributionFactory indexed prizeDistributionFactory,
