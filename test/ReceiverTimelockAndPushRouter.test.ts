@@ -4,7 +4,7 @@ import { ethers, artifacts } from 'hardhat';
 import { BigNumber, Contract, ContractFactory } from 'ethers';
 const { getSigners } = ethers;
 
-describe('ReceiverTimelockAndPushRouter', () => {
+describe('ReceiverTimelockTrigger', () => {
     let wallet1: any;
     let wallet2: any;
 
@@ -14,7 +14,7 @@ describe('ReceiverTimelockAndPushRouter', () => {
     let drawCalculatorTimelock: MockContract;
     let drawBuffer: MockContract;
 
-    let receiverTimelockAndPushRouterFactory: ContractFactory;
+    let ReceiverTimelockTriggerFactory: ContractFactory;
 
     beforeEach(async () => {
         [wallet1, wallet2] = await getSigners();
@@ -28,11 +28,11 @@ describe('ReceiverTimelockAndPushRouter', () => {
         const DrawCalculatorTimelock = await artifacts.readArtifact('DrawCalculatorTimelock');
         drawCalculatorTimelock = await deployMockContract(wallet1, DrawCalculatorTimelock.abi);
 
-        receiverTimelockAndPushRouterFactory = await ethers.getContractFactory(
-            'ReceiverTimelockAndPushRouter',
+        ReceiverTimelockTriggerFactory = await ethers.getContractFactory(
+            'ReceiverTimelockTrigger',
         );
 
-        drawAndPrizeDistributionTimelock = await receiverTimelockAndPushRouterFactory.deploy(
+        drawAndPrizeDistributionTimelock = await ReceiverTimelockTriggerFactory.deploy(
             wallet1.address,
             drawBuffer.address,
             prizeDistributionFactory.address,

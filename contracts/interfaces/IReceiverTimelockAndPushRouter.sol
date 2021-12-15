@@ -6,11 +6,11 @@ import "./IPrizeDistributionFactory.sol";
 import "./IDrawCalculatorTimelock.sol";
 
 /**
- * @title  PoolTogether V4 IReceiverTimelockAndPushRouter
+ * @title  PoolTogether V4 IReceiverTimelockTrigger
  * @author PoolTogether Inc Team
- * @notice The IReceiverTimelockAndPushRouter smart contract interface...
+ * @notice The IReceiverTimelockTrigger smart contract interface...
  */
-interface IReceiverTimelockAndPushRouter {
+interface IReceiverTimelockTrigger {
     /// @notice Emitted when the contract is deployed.
     event Deployed(
         IDrawBuffer indexed drawBuffer,
