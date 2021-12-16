@@ -3,18 +3,19 @@ pragma solidity 0.8.6;
 import "@pooltogether/v4-core/contracts/interfaces/IDrawBeacon.sol";
 import "@pooltogether/v4-core/contracts/interfaces/IDrawBuffer.sol";
 import "@pooltogether/owner-manager-contracts/contracts/Manageable.sol";
-import "./interfaces/IReceiverTimelockAndPushRouter.sol";
+import "./interfaces/IReceiverTimelockTrigger.sol";
 import "./interfaces/IPrizeDistributionFactory.sol";
 import "./interfaces/IDrawCalculatorTimelock.sol";
 
 /**
-  * @title  PoolTogether V4 ReceiverTimelockAndPushRouter
+
+  * @title  PoolTogether V4 ReceiverTimelockTrigger
   * @author PoolTogether Inc Team
-  * @notice The ReceiverTimelockAndPushRouter smart contract is an upgrade of the L2TimelockTimelock smart contract.
+  * @notice The ReceiverTimelockTrigger smart contract is an upgrade of the L2TimelockTimelock smart contract.
             Reducing protocol risk by eliminating off-chain computation of PrizeDistribution parameters. The timelock will
             only pass the total supply of all tickets in a "PrizePool Network" to the prize distribution factory contract.
 */
-contract ReceiverTimelockAndPushRouter is IReceiverTimelockAndPushRouter, Manageable {
+contract ReceiverTimelockTrigger is IReceiverTimelockTrigger, Manageable {
     /* ============ Global Variables ============ */
 
     /// @notice The DrawBuffer contract address.
@@ -29,7 +30,7 @@ contract ReceiverTimelockAndPushRouter is IReceiverTimelockAndPushRouter, Manage
     /* ============ Constructor ============ */
 
     /**
-     * @notice Initialize ReceiverTimelockAndPushRouter smart contract.
+     * @notice Initialize ReceiverTimelockTrigger smart contract.
      * @param _owner The smart contract owner
      * @param _drawBuffer DrawBuffer address
      * @param _prizeDistributionFactory PrizeDistributionFactory address
@@ -47,7 +48,7 @@ contract ReceiverTimelockAndPushRouter is IReceiverTimelockAndPushRouter, Manage
         emit Deployed(_drawBuffer, _prizeDistributionFactory, _timelock);
     }
 
-    /// @inheritdoc IReceiverTimelockAndPushRouter
+    /// @inheritdoc IReceiverTimelockTrigger
     function push(IDrawBeacon.Draw memory _draw, uint256 _totalNetworkTicketSupply)
         external
         override
