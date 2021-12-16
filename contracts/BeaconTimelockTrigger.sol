@@ -3,18 +3,18 @@ pragma solidity 0.8.6;
 import "@pooltogether/v4-core/contracts/interfaces/IDrawBeacon.sol";
 import "@pooltogether/v4-core/contracts/interfaces/IDrawBuffer.sol";
 import "@pooltogether/owner-manager-contracts/contracts/Manageable.sol";
-import "./interfaces/IBeaconTimelockAndPushRouter.sol";
+import "./interfaces/IBeaconTimelockTrigger.sol";
 import "./interfaces/IPrizeDistributionFactory.sol";
 import "./interfaces/IDrawCalculatorTimelock.sol";
 
 /**
-  * @title  PoolTogether V4 BeaconTimelockAndPushRouter
+  * @title  PoolTogether V4 BeaconTimelockTrigger
   * @author PoolTogether Inc Team
-  * @notice The BeaconTimelockAndPushRouter smart contract is an upgrade of the L1TimelockTimelock smart contract.
+  * @notice The BeaconTimelockTrigger smart contract is an upgrade of the L1TimelockTimelock smart contract.
             Reducing protocol risk by eliminating off-chain computation of PrizeDistribution parameters. The timelock will
             only pass the total supply of all tickets in a "PrizePool Network" to the prize distribution factory contract.
 */
-contract BeaconTimelockAndPushRouter is IBeaconTimelockAndPushRouter, Manageable {
+contract BeaconTimelockTrigger is IBeaconTimelockTrigger, Manageable {
     /* ============ Global Variables ============ */
 
     /// @notice PrizeDistributionFactory reference.
@@ -26,7 +26,7 @@ contract BeaconTimelockAndPushRouter is IBeaconTimelockAndPushRouter, Manageable
     /* ============ Constructor ============ */
 
     /**
-     * @notice Initialize BeaconTimelockAndPushRouter smart contract.
+     * @notice Initialize BeaconTimelockTrigger smart contract.
      * @param _owner The smart contract owner
      * @param _prizeDistributionFactory PrizeDistributionFactory address
      * @param _timelock DrawCalculatorTimelock address
@@ -41,7 +41,7 @@ contract BeaconTimelockAndPushRouter is IBeaconTimelockAndPushRouter, Manageable
         emit Deployed(_prizeDistributionFactory, _timelock);
     }
 
-    /// @inheritdoc IBeaconTimelockAndPushRouter
+    /// @inheritdoc IBeaconTimelockTrigger
     function push(IDrawBeacon.Draw memory _draw, uint256 _totalNetworkTicketSupply)
         external
         override

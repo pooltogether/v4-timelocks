@@ -4,13 +4,13 @@ import { ethers, artifacts } from 'hardhat';
 import { BigNumber, Contract, ContractFactory } from 'ethers';
 const { getSigners } = ethers;
 
-describe('BeaconTimelockAndPushRouter', () => {
+describe('BeaconTimelockTrigger', () => {
     let wallet1: any;
     let wallet2: any;
     let drawAndPrizeDistributionTimelock: Contract;
     let prizeDistributionFactory: MockContract;
     let drawCalculatorTimelock: MockContract;
-    let beaconTimelockAndPushRouterFactory: ContractFactory;
+    let BeaconTimelockTriggerFactory: ContractFactory;
 
     beforeEach(async () => {
         [wallet1, wallet2] = await getSigners();
@@ -18,10 +18,10 @@ describe('BeaconTimelockAndPushRouter', () => {
         prizeDistributionFactory = await deployMockContract(wallet1, PrizeDistributionFactory.abi);
         const DrawCalculatorTimelock = await artifacts.readArtifact('DrawCalculatorTimelock');
         drawCalculatorTimelock = await deployMockContract(wallet1, DrawCalculatorTimelock.abi);
-        beaconTimelockAndPushRouterFactory = await ethers.getContractFactory(
-            'BeaconTimelockAndPushRouter',
+        BeaconTimelockTriggerFactory = await ethers.getContractFactory(
+            'BeaconTimelockTrigger',
         );
-        drawAndPrizeDistributionTimelock = await beaconTimelockAndPushRouterFactory.deploy(
+        drawAndPrizeDistributionTimelock = await BeaconTimelockTriggerFactory.deploy(
             wallet1.address,
             prizeDistributionFactory.address,
             drawCalculatorTimelock.address,
