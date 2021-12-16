@@ -18,9 +18,7 @@ describe('BeaconTimelockTrigger', () => {
         prizeDistributionFactory = await deployMockContract(wallet1, PrizeDistributionFactory.abi);
         const DrawCalculatorTimelock = await artifacts.readArtifact('DrawCalculatorTimelock');
         drawCalculatorTimelock = await deployMockContract(wallet1, DrawCalculatorTimelock.abi);
-        BeaconTimelockTriggerFactory = await ethers.getContractFactory(
-            'BeaconTimelockTrigger',
-        );
+        BeaconTimelockTriggerFactory = await ethers.getContractFactory('BeaconTimelockTrigger');
         drawAndPrizeDistributionTimelock = await BeaconTimelockTriggerFactory.deploy(
             wallet1.address,
             prizeDistributionFactory.address,

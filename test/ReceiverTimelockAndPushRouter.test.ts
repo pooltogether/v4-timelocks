@@ -28,9 +28,7 @@ describe('ReceiverTimelockTrigger', () => {
         const DrawCalculatorTimelock = await artifacts.readArtifact('DrawCalculatorTimelock');
         drawCalculatorTimelock = await deployMockContract(wallet1, DrawCalculatorTimelock.abi);
 
-        ReceiverTimelockTriggerFactory = await ethers.getContractFactory(
-            'ReceiverTimelockTrigger',
-        );
+        ReceiverTimelockTriggerFactory = await ethers.getContractFactory('ReceiverTimelockTrigger');
 
         drawAndPrizeDistributionTimelock = await ReceiverTimelockTriggerFactory.deploy(
             wallet1.address,
