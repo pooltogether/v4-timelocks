@@ -4,25 +4,35 @@ import { ethers, artifacts } from 'hardhat';
 import { BigNumber, Contract, ContractFactory } from 'ethers';
 const { getSigners } = ethers;
 
-describe('BeaconTimelockAndPushRouter', () => {
+describe('ReceiverTimelockTrigger', () => {
     let wallet1: any;
     let wallet2: any;
+
     let drawAndPrizeDistributionTimelock: Contract;
+
     let prizeDistributionFactory: MockContract;
     let drawCalculatorTimelock: MockContract;
-    let beaconTimelockAndPushRouterFactory: ContractFactory;
+    let drawBuffer: MockContract;
+
+    let ReceiverTimelockTriggerFactory: ContractFactory;
 
     beforeEach(async () => {
         [wallet1, wallet2] = await getSigners();
+
         const PrizeDistributionFactory = await artifacts.readArtifact('IPrizeDistributionFactory');
         prizeDistributionFactory = await deployMockContract(wallet1, PrizeDistributionFactory.abi);
+
+        const DrawBufferArtifact = await artifacts.readArtifact('IDrawBuffer');
+        drawBuffer = await deployMockContract(wallet1, DrawBufferArtifact.abi);
+
         const DrawCalculatorTimelock = await artifacts.readArtifact('DrawCalculatorTimelock');
         drawCalculatorTimelock = await deployMockContract(wallet1, DrawCalculatorTimelock.abi);
-        beaconTimelockAndPushRouterFactory = await ethers.getContractFactory(
-            'BeaconTimelockAndPushRouter',
-        );
-        drawAndPrizeDistributionTimelock = await beaconTimelockAndPushRouterFactory.deploy(
+
+        ReceiverTimelockTriggerFactory = await ethers.getContractFactory('ReceiverTimelockTrigger');
+
+        drawAndPrizeDistributionTimelock = await ReceiverTimelockTriggerFactory.deploy(
             wallet1.address,
+            drawBuffer.address,
             prizeDistributionFactory.address,
             drawCalculatorTimelock.address,
         );
@@ -32,7 +42,16 @@ describe('BeaconTimelockAndPushRouter', () => {
         it('should emit Deployed event', async () => {
             await expect(drawAndPrizeDistributionTimelock.deployTransaction)
                 .to.emit(drawAndPrizeDistributionTimelock, 'Deployed')
-                .withArgs(prizeDistributionFactory.address, drawCalculatorTimelock.address);
+                .withArgs(
+                    drawBuffer.address,
+                    prizeDistributionFactory.address,
+                    drawCalculatorTimelock.address,
+                );
+
+            expect(await drawAndPrizeDistributionTimelock.drawBuffer()).to.equal(
+                drawBuffer.address,
+            );
+
             expect(await drawAndPrizeDistributionTimelock.prizeDistributionFactory()).to.equal(
                 prizeDistributionFactory.address,
             );
@@ -52,13 +71,14 @@ describe('BeaconTimelockAndPushRouter', () => {
         };
 
         it('should allow a push when no push has happened', async () => {
+            await drawBuffer.mock.pushDraw.returns(draw.drawId);
             await prizeDistributionFactory.mock.pushPrizeDistribution.returns();
             await drawCalculatorTimelock.mock.lock.returns(true);
             await expect(
                 drawAndPrizeDistributionTimelock.push(draw, BigNumber.from(1000000)),
             ).to.emit(
                 drawAndPrizeDistributionTimelock,
-                'DrawLockedAndTotalNetworkTicketSupplyPushed',
+                'DrawLockedPushedAndTotalNetworkTicketSupplyPushed',
             );
         });
 
@@ -72,7 +92,10 @@ describe('BeaconTimelockAndPushRouter', () => {
 
         it('should not allow a push if a draw is still timelocked', async () => {
             await drawCalculatorTimelock.mock.lock.revertsWithReason('OM/timelock-not-expired');
+
+            await drawBuffer.mock.pushDraw.returns(draw.drawId);
             await prizeDistributionFactory.mock.pushPrizeDistribution.returns();
+
             await expect(
                 drawAndPrizeDistributionTimelock.push(draw, BigNumber.from(1000000)),
             ).to.be.revertedWith('OM/timelock-not-expired');
