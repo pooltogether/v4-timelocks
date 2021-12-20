@@ -1,6 +1,6 @@
 {
   "name": "@pooltogether/v4-timelocks",
-  "version": "1.0.0-beta.6",
+  "version": "1.1.0",
   "description": "PoolTogether V4 Timelocks",
   "main": "index.js",
   "license": "MIT",
@@ -26,7 +26,7 @@
   },
   "peerDependencies": {
     "@pooltogether/owner-manager-contracts": "1.1.0",
-    "@pooltogether/v4-core": "^1.0.0-beta.3"
+    "@pooltogether/v4-core": "^1.2.0"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "2.0.2",
@@ -34,8 +34,7 @@
     "@nomiclabs/hardhat-waffle": "2.0.1",
     "@openzeppelin/hardhat-upgrades": "1.6.0",
     "@pooltogether/owner-manager-contracts": "1.1.0",
-    "@pooltogether/pooltogether-proxy-factory-package": "1.0.1",
-    "@pooltogether/v4-core": "^1.0.0-beta.3",
+    "@pooltogether/v4-core": "^1.2.0",
     "@types/chai": "4.2.15",
     "@types/debug": "4.1.5",
     "@types/mocha": "8.2.1",
