@@ -1,4 +1,4 @@
-# PoolTogether V4 Timelock Contracts
+# PoolTogether V4 Timelocks Contracts
 
 ![Tests](https://github.com/pooltogether/v4-timelocks/actions/workflows/main.yml/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/pooltogether/v4-timelocks/badge.svg?branch=master)](https://coveralls.io/github/pooltogether/v4-timelocks?branch=master&asdf=1)
@@ -11,19 +11,22 @@
 [![Discord](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/JFBPMxv5tr)
 [![Twitter](https://badgen.net/badge/icon/twitter?icon=twitter&label)](https://twitter.com/PoolTogether_)
 
-**Documention**<br>
-https://docs.pooltogether.com
+**Documentation**<br>
+https://v4.docs.pooltogether.com
 
 **Deployments**<br>
-- [Ethereum](https://docs.pooltogether.com/resources/networks/ethereum)
-- [Matic](https://docs.pooltogether.com/resources/networks/matic)
+- [Ethereum](https://v4.docs.pooltogether.com/protocol/deployments/mainnet#mainnet)
+- [Polygon](https://v4.docs.pooltogether.com/protocol/deployments/mainnet#polygon)
+- [Avalanche](https://v4.docs.pooltogether.com/protocol/deployments/mainnet#avalanche)
 
 # Overview
+- [BeaconTimelockTrigger](/contracts/BeaconTimelockTrigger.sol)
 - [DrawCalculatorTimelock](/contracts/DrawCalculatorTimelock.sol)
 - [L1TimelockTrigger](/contracts/L1TimelockTrigger.sol)
 - [L2TimelockTrigger](/contracts/L2TimelockTrigger.sol)
+- [ReceiverTimelockTrigger](/contracts/ReceiverTimelockTrigger.sol)
 
-Timelock contracts assist with Phase 1 in the roll-out of V4. Granting authority to the operrations teams to prevent a "bad actor" oracle from incorrectly setting a draw or prize distribution params. 
+Timelock contracts assist with Phase 1 in the roll-out of V4. Granting authority to the operations teams to prevent a "bad actor" oracle from incorrectly setting a draw or prize distribution params. 
 
 ### DrawCalculatorTimelock
 The DrawCalculatorTimelock adds a timelock for PrizeDistributor to execute a claim with the most recently pushed PrizeDistribution params pushed. 
@@ -37,7 +40,7 @@ The `L1TimelockTrigger` contract pushes `DrawLib.Draw` and `DrawLib.PrizeDistrib
 ### L2TimelockTrigger
 The `L2TimelockTrigger` pushes `DrawLib.PrizeDistribution` params onto a `PrizeDistributionBuffer` contract.
 
-**Core and Timelock contracts:**
+**Core and Periphery contracts:**
 
 - https://github.com/pooltogether/v4-core
 - https://github.com/pooltogether/v4-periphery
@@ -63,7 +66,7 @@ $ yarn
 We use [direnv](https://direnv.net/) to manage environment variables.  You'll likely need to install it.
 
 ```sh
-cp .envrc.example .envrv
+cp .envrc.example .envrc
 ```
 
 To run fork scripts, deploy or perform any operation with a mainnet/testnet node you will need an Infura API key.
@@ -109,4 +112,10 @@ $ yarn start
 ```
 
 NOTE: When you run this command it will reset the local blockchain.
+
+## Testnets
+Deployment is maintained in a different [repo](https://github.com/pooltogether/v4-testnet).
+
+## Mainnet
+Deployment is maintained in a different [repo](https://github.com/pooltogether/v4-mainnet).
 
